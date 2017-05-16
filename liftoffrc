@@ -1,0 +1,85 @@
+company: Touch Instinct
+prefix: ""
+company_identifier: ru.touchin
+
+test_target_name: UnitTests
+configure_git: true
+warnings_as_errors: true
+enable_static_analyzer: true
+indentation_level: 4
+use_tabs: false
+dependency_managers: cocoapods
+enable_settings: false
+strict_prompts: true
+deployment_target: 9.0
+
+run_script_phases:
+  - file: todo.sh
+    name: Warn for TODO and FIXME comments
+  - file: cpd.sh
+    name: CopyPaste Detection
+  - file: swiftlint.sh
+    name: SwiftLint
+  - file: tailor.sh
+    name: Tailor
+
+templates:
+  - setup.sh: scripts/setup
+  - README.md: README.md
+  - Rambafile.template: Rambafile
+
+warnings:
+  - GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED
+  - GCC_WARN_MISSING_PARENTHESES
+  - GCC_WARN_ABOUT_RETURN_TYPE
+  - GCC_WARN_SIGN_COMPARE
+  - GCC_WARN_CHECK_SWITCH_STATEMENTS
+  - GCC_WARN_UNUSED_FUNCTION
+  - GCC_WARN_UNUSED_LABEL
+  - GCC_WARN_UNUSED_VALUE
+  - GCC_WARN_UNUSED_VARIABLE
+  - GCC_WARN_SHADOW
+  - GCC_WARN_64_TO_32_BIT_CONVERSION
+  - GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS
+  - GCC_WARN_ABOUT_MISSING_NEWLINE
+  - GCC_WARN_UNDECLARED_SELECTOR
+  - GCC_WARN_TYPECHECK_CALLS_TO_PRINTF
+  - GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS
+  - CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS
+  - CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF
+  - CLANG_WARN_IMPLICIT_SIGN_CONVERSION
+  - CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION
+  - CLANG_WARN_EMPTY_BODY
+  - CLANG_WARN_ENUM_CONVERSION
+  - CLANG_WARN_INT_CONVERSION
+  - CLANG_WARN_CONSTANT_CONVERSION
+
+xcode_command: open -a 'Xcode' .
+
+project_template: mvvm-swift
+
+app_target_templates:
+  mvvm-swift:
+    - <%= project_name %>:
+      - Analytics:
+      - Controllers:
+      - Extensions:
+      - Services:
+      - Views:
+      - Cells:
+      - Models:
+      - Protocols:
+      - Networking:
+      - Realm:
+      - Resources:
+        - Images.xcassets
+        - LaunchScreen.storyboard
+      - Info.plist
+      - AppDelegate.swift
+
+test_target_templates:
+  mvvm-swift:
+    - <%= test_target_name %>:
+      - Resources:
+        - <%= test_target_name %>-Info.plist
+      - Tests:

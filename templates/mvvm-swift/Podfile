@@ -1,0 +1,20 @@
+source 'https://github.com/CocoaPods/Specs'
+source "https://github.com/TouchInstinct/Podspecs.git"
+
+platform :ios, '<%= deployment_target %>'
+
+use_frameworks!
+inhibit_all_warnings!
+
+target '<%= project_name %>' do
+  pod 'LeadKit'
+  pod 'Fabric'
+  pod 'Crashlytics'
+end
+
+target '<%= test_target_name %>' do
+  # pod 'LeadKit'
+end
+
+# If you have slow HDD
+ENV['COCOAPODS_DISABLE_STATS'] = "true"
