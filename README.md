@@ -9,21 +9,17 @@ Template and config files for liftoff
 You need to edit the file named project.rb located in /usr/local/Cellar/liftoff/{lastest version}/rubylib/liftoff/ And add theses lines in function named 'new_app_target' :
 
 ```
-configuration.build_settings['SWIFT_VERSION'] = '3.0'
+configuration.build_settings['SWIFT_VERSION'] = '3.1'
 ```
 
-### Link configs
+### Setup liftoff config
 
 ```sh
-ln -s liftoffrc ~/.liftoffrc
-
-mkdir ~/.liftoff
-
-ln -s lifoffrc/templates/mmvm-swift/ ~/.liftoff/templates
+./setup_config.sh
 ```
 
 ## Bootstrap project:
 
 ```sh
-echo "PROJECT_NAME" | ./bootstrap.sh
+./bootstrap.sh PROJECT_NAME path/to/projects
 ```
