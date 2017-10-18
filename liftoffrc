@@ -20,8 +20,6 @@ run_script_phases:
     name: CopyPaste Detection
   - file: swiftlint.sh
     name: SwiftLint
-  - file: tailor.sh
-    name: Tailor
 
 templates:
   - README.md: README.md
