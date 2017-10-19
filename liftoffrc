@@ -20,6 +20,8 @@ run_script_phases:
     name: CopyPaste Detection
   - file: swiftlint.sh
     name: SwiftLint
+  - file: fabric.sh
+    name: Fabric
 
 templates:
   - README.md: README.md

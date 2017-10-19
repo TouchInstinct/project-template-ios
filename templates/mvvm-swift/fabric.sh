@@ -1,0 +1,1 @@
+"${PODS_ROOT}/Fabric/run" API_KEY BUILD_SECRET

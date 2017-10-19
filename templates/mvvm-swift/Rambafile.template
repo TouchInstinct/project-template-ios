@@ -20,4 +20,4 @@ podfile_path: Podfile
 
 ### Templates
 templates:
-- {name: swifty_mvvm_touchin, git: 'https://github.com/TouchInstinct/Styleguide'}
+- {name: touchin, git: 'https://github.com/TouchInstinct/generamba_templates/'}
