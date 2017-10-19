@@ -14,8 +14,6 @@ strict_prompts: true
 deployment_target: 9.0
 
 run_script_phases:
-  - file: todo.sh
-    name: Warn for TODO and FIXME comments
   - file: cpd.sh
     name: CopyPaste Detection
   - file: swiftlint.sh
@@ -26,6 +24,7 @@ run_script_phases:
 templates:
   - README.md: README.md
   - Rambafile.template: Rambafile
+  - Fastfile: Fastlane/Fastfile
 
 warnings:
   - GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED
