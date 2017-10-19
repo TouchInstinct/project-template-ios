@@ -14,8 +14,6 @@ strict_prompts: true
 deployment_target: 9.0
 
 run_script_phases:
-  - file: todo.sh
-    name: Warn for TODO and FIXME comments
   - file: cpd.sh
     name: CopyPaste Detection
   - file: swiftlint.sh
