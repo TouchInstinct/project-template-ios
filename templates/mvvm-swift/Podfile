@@ -6,6 +6,13 @@ platform :ios, '<%= deployment_target %>'
 use_frameworks!
 inhibit_all_warnings!
 
+project '<%= project_name %>', {
+    'StandardDebug' => :debug,
+    'EnterpriseDebug' => :debug,
+    'StandardRelease' => :release,
+    'EnterpriseRelease' => :release
+}
+
 target '<%= project_name %>' do
   pod 'LeadKit'
   pod 'Fabric'
