@@ -24,6 +24,7 @@ run_script_phases:
 templates:
   - README.md: README.md
   - Rambafile.template: Rambafile
+  - Fastfile: Fastlane/Fastfile
 
 warnings:
   - GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED
