@@ -9,7 +9,7 @@ echo $PROJECT_NAME | liftoff
 
 cd $PROJECT_NAME
 
-git submodule add --name code-quality https://github.com/TouchInstinct/code-quality-ios code-quality
+git submodule add --name code-quality git@github.com:TouchInstinct/code-quality-ios.git
 
 ln -s code-quality/.swiftlint.yml .swiftlint.yml
 ln -s code-quality/cpd_script.php cpd_script.php
