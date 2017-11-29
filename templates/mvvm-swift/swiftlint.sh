@@ -1,5 +1,1 @@
-if which swiftlint >/dev/null; then
-    swiftlint
-else
-    echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
-fi
+${PODS_ROOT}/SwiftLint/swiftlint --path <%= project_name %> --config ${PROJECT_DIR}/code-quality/.swiftlint.yml

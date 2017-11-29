@@ -17,6 +17,7 @@ target '<%= project_name %>' do
   pod 'LeadKit'
   pod 'Fabric'
   pod 'Crashlytics'
+  pod 'SwiftLint'
 end
 
 target '<%= test_target_name %>' do
