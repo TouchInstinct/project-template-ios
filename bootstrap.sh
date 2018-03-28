@@ -22,7 +22,7 @@ cd $PROJECTS_PATH
 
 # main project folder
 # check for folder existence
-mkdir $PROJECT_NAME
+mkdir -p $PROJECT_NAME
 cd $PROJECT_NAME
 
 echo "Clean up folders and files..."
@@ -55,6 +55,9 @@ done
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
 pod install
 
+cp $TEMPLATES/gitignore .gitignore
+cp $TEMPLATES/gitattributes .gitattributes
+
 # configure submodules
 git submodule add git@github.com:TouchInstinct/$COMMON_REPO_NAME.git common
 git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
@@ -67,4 +70,4 @@ git submodule update --init
 #### rm "project.yml"
 
 # commit state
-#### git commit -m "Setup project configuration"
+git commit -m "Setup project configuration"

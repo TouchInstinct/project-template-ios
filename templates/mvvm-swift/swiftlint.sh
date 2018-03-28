@@ -1,1 +1,0 @@
-${PODS_ROOT}/SwiftLint/swiftlint --path <%= project_name %> --config ${PROJECT_DIR}/code-quality/.swiftlint.yml
