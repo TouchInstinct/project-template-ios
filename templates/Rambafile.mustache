@@ -1,0 +1,30 @@
+### Headers settings
+company: Touch Instinct
+
+### Xcode project settings
+project_name: {{project_name}}
+xcodeproj_path: {{project_name}}.xcodeproj
+
+### Code generation settings section
+# The main project target name
+project_target: {{project_name}}
+
+# The file path for new modules
+project_file_path: {{project_name}}/Controllers
+
+# The Xcode group path to new modules
+project_group_path: {{project_name}}/Controllers
+
+### Dependencies settings section
+podfile_path: Podfile
+
+### Catalog
+catalogs:
+- 'https://github.com/TouchInstinct/generamba_templates'
+
+### Templates
+templates:
+- {name: touchin}
+- {name: touchin-stateful}
+- {name: touchin-pagination}
+- {name: touchin-tablecell}

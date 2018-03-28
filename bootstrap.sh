@@ -21,7 +21,6 @@ TEMPLATES=$CURRENT_DIR/templates
 cd $PROJECTS_PATH
 
 # main project folder
-# check for folder existence
 mkdir -p $PROJECT_NAME
 cd $PROJECT_NAME
 
@@ -37,7 +36,8 @@ echo "Recreate sources folders..."
 mkdir $PROJECT_NAME
 
 # copy files
-cp -R $CURRENT_DIR/sources/. $PROJECT_NAME
+cp -R $CURRENT_DIR/sources/project/. $PROJECT_NAME
+cp -R $CURRENT_DIR/sources/fastlane/. fastlane
 
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/project.mustache project.yml
@@ -55,8 +55,14 @@ done
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
 pod install
 
+# configure git
 cp $TEMPLATES/gitignore .gitignore
 cp $TEMPLATES/gitattributes .gitattributes
+
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Rambafile.mustache Rambafile
+generamba template install
+
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/README.mustache README.md
 
 # configure submodules
 git submodule add git@github.com:TouchInstinct/$COMMON_REPO_NAME.git common
@@ -70,4 +76,5 @@ git submodule update --init
 #### rm "project.yml"
 
 # commit state
+git add .
 git commit -m "Setup project configuration"
