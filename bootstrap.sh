@@ -46,6 +46,11 @@ generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" 
 echo "Generate xcodeproj file..."
 xcodegen # default to `project.yml`
 
+# creating .gitkeep
+for folder in Analytics Cells Controllers Extensions Generated Models Networking Protocols Realm Resources/Localization Services Views; do
+  touch $PROJECT_NAME/$folder/.gitkeep
+done
+
 # install pods
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
 pod install
