@@ -16,5 +16,27 @@ targets:
     sources:
       - path: {{name}}
         buildPhase: sources
-        type: group
-        # excludes .gitkeep
+      - path: {{name}}/Analytics
+        buildPhase: sources
+      - path: {{name}}/Cells
+        buildPhase: sources
+      - path: {{name}}/Controllers
+        buildPhase: sources
+      - path: {{name}}/Extensions
+        buildPhase: sources
+      - path: {{name}}/Generated
+        buildPhase: sources
+      - path: {{name}}/Models
+        buildPhase: sources
+      - path: {{name}}/Networking
+        buildPhase: sources
+      - path: {{name}}/Protocols
+        buildPhase: sources
+      - path: {{name}}/Realm
+        buildPhase: sources
+      - path: {{name}}/Resources
+        buildPhase: sources
+      - path: {{name}}/Services
+        buildPhase: sources
+      - path: {{name}}/Views
+        buildPhase: sources

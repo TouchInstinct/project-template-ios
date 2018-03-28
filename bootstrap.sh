@@ -1,10 +1,20 @@
 #!/bin/sh
 
+function generate {
+  PARAMS=$1
+  TEMPLATE_PATH=$2
+  RESULT_PATH=$3
+
+  echo $PARAMS > data.yml
+  mustache data.yml $TEMPLATE_PATH > $RESULT_PATH
+  rm data.yml
+}
+
 PROJECT_NAME=$1
 PROJECTS_PATH=$2
 COMMON_REPO_NAME=$3
 
-CURRENT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 TEMPLATES=$CURRENT_DIR/templates
 RESOURCES=$CURRENT_DIR/resources
 
@@ -25,37 +35,17 @@ git init
 # source code project folder
 echo "Recreate sources folders..."
 mkdir $PROJECT_NAME
-cd $PROJECT_NAME
-
-for folder in `cat $CURRENT_DIR/foldernames-test.txt`; do
-    echo "Creating $folder ..."
-    mkdir $folder
-    touch $folder/.gitkeep
-done
-
-cd ..
 
 # copy files
-cp $RESOURCES/AppDelegate.swift $PROJECT_NAME/AppDelegate.swift
-cp $RESOURCES/Info.plist $PROJECT_NAME/Info.plist
-cp -R $RESOURCES/Assets.xcassets $PROJECT_NAME/Resources/Assets.xcassets
+cp -R $RESOURCES/. $PROJECT_NAME
 
-function generate {
-  PARAMS=$1
-  TEMPLATE_PATH=$2
-  RESULT_PATH=$3
 
-  echo $PARAMS > data.yml
-  mustache data.yml $TEMPLATE_PATH > $RESULT_PATH
-  rm data.yml
-}
-
-PROJECT_XCODEGEN_FILENAME="project.yml"
-generate "{ name: $PROJECT_NAME }" $TEMPLATES/project.mustache $PROJECT_XCODEGEN_FILENAME
+generate "{ name: $PROJECT_NAME }" $TEMPLATES/project.mustache project.yml
+generate "{ name: $PROJECT_NAME }" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
 
 # generate xcode project file
 echo "Generate xcodeproj file..."
-xcodegen --spec $PROJECT_XCODEGEN_FILENAME
+xcodegen # default to `project.yml`
 
 
 # install pods
