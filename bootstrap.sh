@@ -3,18 +3,21 @@
 PROJECT_NAME=$1
 PROJECTS_PATH=$2
 CURRENT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+TEMPLATES=$CURRENT_DIR/templates
 
 cd $PROJECTS_PATH
 
-# clean up
-rm -rf $PROJECT_NAME
-
 # main project folder
+# check for folder existence
 mkdir $PROJECT_NAME
 cd $PROJECT_NAME
 
+echo "Clean up folders and files..."
+rm -rf $PROJECT_NAME
+rm -rf $(ls)
 
 # source code project folder
+echo "Recreate sources folders..."
 mkdir $PROJECT_NAME
 cd $PROJECT_NAME
 
@@ -29,20 +32,23 @@ cd ..
 
 # generate yml project file
 PROJECT_CONFIG_FILENAME="project-config.yml"
-cp $CURRENT_DIR/templates/project.mustache project.mustache
-  # create yml-definition project
+PROJECT_XCODEGEN_FILENAME="project.yml"
+# create yml-definition project
 cat <<EOF >$PROJECT_CONFIG_FILENAME
   { name: $PROJECT_NAME }
 EOF
-  # feed to template for yml file & generate yml code for xcodegen
-mustache $PROJECT_CONFIG_FILENAME project.mustache > project.yml
+# feed to template for yml file & generate yml code for xcodegen
+
+mustache $PROJECT_CONFIG_FILENAME $TEMPLATES/project.mustache > $PROJECT_XCODEGEN_FILENAME
 
 
 # generate xcode project file
-xcodegen --spec project.yml
+xcodegen --spec $PROJECT_XCODEGEN_FILENAME
 
 
 # install pods
+pod init
+pod install
 
 # expand scripts
 
@@ -53,6 +59,8 @@ xcodegen --spec project.yml
 # enable shared scheme
 
 # final clean up
+rm $PROJECT_CONFIG_FILENAME
+rm $PROJECT_XCODEGEN_FILENAME
 
 
 # echo $PROJECT_NAME | liftoff
