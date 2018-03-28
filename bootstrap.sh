@@ -17,7 +17,6 @@ DEPLOYMENT_TARGET="10.0"
 
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 TEMPLATES=$CURRENT_DIR/templates
-RESOURCES=$CURRENT_DIR/resources
 
 cd $PROJECTS_PATH
 
@@ -38,30 +37,29 @@ echo "Recreate sources folders..."
 mkdir $PROJECT_NAME
 
 # copy files
-cp -R $RESOURCES/. $PROJECT_NAME
+cp -R $CURRENT_DIR/sources/. $PROJECT_NAME
 
-generate "{ project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET }" $TEMPLATES/project.mustache project.yml
-generate "{ project_name: $PROJECT_NAME }" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
+generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/project.mustache project.yml
 
 # generate xcode project file
 echo "Generate xcodeproj file..."
 xcodegen # default to `project.yml`
 
-
 # install pods
-generate "{ project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET }" $TEMPLATES/Podfile.mustache Podfile
+generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
 pod install
 
 # configure submodules
-git submodule add --name common git@github.com:TouchInstinct/$COMMON_REPO_NAME.git
-git submodule add --name build-scripts git@github.com:TouchInstinct/BuildScripts.git
+git submodule add git@github.com:TouchInstinct/$COMMON_REPO_NAME.git common
+git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
 
 git submodule update --init
 
 # enable shared scheme
 
 # final clean up
-rm "project.yml"
+#### rm "project.yml"
 
 # commit state
 #### git commit -m "Setup project configuration"

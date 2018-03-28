@@ -13,6 +13,19 @@ targets:
   {{project_name}}:
     type: application
     platform: iOS
+    prebuildScripts:
+      - script: ". build-scripts/xcode/build_phases/localization.sh"
+        name: Localization
+      - script: ". build-scripts/xcode/build_phases/api_generator.sh 1.1.5"
+        name: API Genarator
+    postbuildScripts:
+      - script: ". build-scripts/xcode/build_phases/swiftlint.sh"
+        name: Swiftlint
+      - script: ". build-scripts/xcode/build_phases/copy_paste_detection.sh"
+        name: CopyPaste Detection
+      - script: "\"${PODS_ROOT}/Fabric/run\" KEY_1 KEY_2"
+        name: Fabric
+        runOnlyWhenInstalling: true
     sources:
       - path: {{project_name}}
         buildPhase: sources
