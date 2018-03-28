@@ -1,0 +1,20 @@
+name: {{name}}
+options:
+  createIntermediateGroups: true
+  xcodeVersion: 9.2
+  deploymentTarget:
+    iOS: "10.0"
+configs:
+  StandardDebug: debug
+  StandardRelease: release
+  EnterpriseDebug: debug
+  EnterpriseRelease: release
+targets:
+  {{name}}:
+    type: application
+    platform: iOS
+    sources:
+      - path: {{name}}
+        buildPhase: sources
+        type: group
+        # excludes .gitkeep

@@ -6,9 +6,13 @@ CURRENT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 cd $PROJECTS_PATH
 
+# clean up
+rm -rf $PROJECT_NAME
+
 # main project folder
 mkdir $PROJECT_NAME
 cd $PROJECT_NAME
+
 
 # source code project folder
 mkdir $PROJECT_NAME
@@ -22,13 +26,21 @@ done
 
 cd ..
 
+
 # generate yml project file
+PROJECT_CONFIG_FILENAME="project-config.yml"
+cp $CURRENT_DIR/templates/project.mustache project.mustache
   # create yml-definition project
-  # feed to template for yml file
-  # generate final yml code
+cat <<EOF >$PROJECT_CONFIG_FILENAME
+  { name: $PROJECT_NAME }
+EOF
+  # feed to template for yml file & generate yml code for xcodegen
+mustache $PROJECT_CONFIG_FILENAME project.mustache > project.yml
+
 
 # generate xcode project file
-# xcodegen --spec project.yml
+xcodegen --spec project.yml
+
 
 # install pods
 
@@ -40,6 +52,7 @@ cd ..
 
 # enable shared scheme
 
+# final clean up
 
 
 # echo $PROJECT_NAME | liftoff

@@ -1,0 +1,20 @@
+name: TestProject
+options:
+  createIntermediateGroups: true
+  xcodeVersion: 9.2
+  deploymentTarget:
+    iOS: "10.0"
+configs:
+  StandardDebug: debug
+  StandardRelease: release
+  EnterpriseDebug: debug
+  EnterpriseRelease: release
+targets:
+  TestProject:
+    type: application
+    platform: iOS
+    sources:
+      - path: TestProject
+        buildPhase: sources
+        type: group
+        # excludes .gitkeep
