@@ -14,7 +14,7 @@ cd $PROJECT_NAME
 mkdir $PROJECT_NAME
 cd $PROJECT_NAME
 
-for folder in `cat $CURRENT_DIR/foldernames.txt`; do
+for folder in `cat $CURRENT_DIR/foldernames-test.txt`; do
     echo "Creating $folder ..."
     mkdir $folder
     touch $folder/.gitkeep
@@ -23,20 +23,12 @@ done
 cd ..
 
 # generate yml project file
-cat <<EOF >project.yml
-name: $PROJECT_NAME
-options:
-  bundleIdPrefix: ru.touchin.$PROJECT_NAME
-targets:
-  $PROJECT_NAME:
-    type: application
-    platform: iOS
-    deploymentTarget: "10.0"
-    sources: [$PROJECT_NAME]
-EOF
+  # create yml-definition project
+  # feed to template for yml file
+  # generate final yml code
 
 # generate xcode project file
-xcodegen --spec project.yml
+# xcodegen --spec project.yml
 
 # install pods
 
@@ -54,12 +46,8 @@ xcodegen --spec project.yml
 #
 # cd $PROJECT_NAME
 #
+# git submodule add --name  git@github.com:TouchInstinct/$PROJECT_NAME-common.git
+# git submodule add --name code-quality git@github.com:TouchInstinct/code-quality-ios.git
 # git submodule add --name code-quality git@github.com:TouchInstinct/code-quality-ios.git
 #
-# ln -s code-quality/.swiftlint.yml .swiftlint.yml
-# ln -s code-quality/cpd_script.php cpd_script.php
-#
-# git add .swiftlint.yml
-# git add cpd_script.php
-#
-# git commit --amend -m "Initial commit"
+# git commit --amend -m "Project Started"
