@@ -1,42 +1,42 @@
-name: {{name}}
+name: {{project_name}}
 options:
   createIntermediateGroups: true
   xcodeVersion: 9.2
   deploymentTarget:
-    iOS: "10.0"
+    iOS: "{{deployment_target}}"
 configs:
   StandardDebug: debug
   StandardRelease: release
   EnterpriseDebug: debug
   EnterpriseRelease: release
 targets:
-  {{name}}:
+  {{project_name}}:
     type: application
     platform: iOS
     sources:
-      - path: {{name}}
+      - path: {{project_name}}
         buildPhase: sources
-      - path: {{name}}/Analytics
+      - path: {{project_name}}/Analytics
         buildPhase: sources
-      - path: {{name}}/Cells
+      - path: {{project_name}}/Cells
         buildPhase: sources
-      - path: {{name}}/Controllers
+      - path: {{project_name}}/Controllers
         buildPhase: sources
-      - path: {{name}}/Extensions
+      - path: {{project_name}}/Extensions
         buildPhase: sources
-      - path: {{name}}/Generated
+      - path: {{project_name}}/Generated
         buildPhase: sources
-      - path: {{name}}/Models
+      - path: {{project_name}}/Models
         buildPhase: sources
-      - path: {{name}}/Networking
+      - path: {{project_name}}/Networking
         buildPhase: sources
-      - path: {{name}}/Protocols
+      - path: {{project_name}}/Protocols
         buildPhase: sources
-      - path: {{name}}/Realm
+      - path: {{project_name}}/Realm
         buildPhase: sources
-      - path: {{name}}/Resources
+      - path: {{project_name}}/Resources
         buildPhase: sources
-      - path: {{name}}/Services
+      - path: {{project_name}}/Services
         buildPhase: sources
-      - path: {{name}}/Views
+      - path: {{project_name}}/Views
         buildPhase: sources

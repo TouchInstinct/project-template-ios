@@ -13,6 +13,7 @@ function generate {
 PROJECT_NAME=$1
 PROJECTS_PATH=$2
 COMMON_REPO_NAME=$3
+DEPLOYMENT_TARGET="10.0"
 
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 TEMPLATES=$CURRENT_DIR/templates
@@ -39,9 +40,8 @@ mkdir $PROJECT_NAME
 # copy files
 cp -R $RESOURCES/. $PROJECT_NAME
 
-
-generate "{ name: $PROJECT_NAME }" $TEMPLATES/project.mustache project.yml
-generate "{ name: $PROJECT_NAME }" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
+generate "{ project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET }" $TEMPLATES/project.mustache project.yml
+generate "{ project_name: $PROJECT_NAME }" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
 
 # generate xcode project file
 echo "Generate xcodeproj file..."
@@ -49,22 +49,19 @@ xcodegen # default to `project.yml`
 
 
 # install pods
-pod init
+generate "{ project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET }" $TEMPLATES/Podfile.mustache Podfile
 pod install
 
 # configure submodules
-# git submodule add --name common git@github.com:TouchInstinct/$COMMON_REPO_NAME.git
-# git submodule add --name build-scripts git@github.com:TouchInstinct/BuildScripts.git
-#
-# git submodule update --init
+git submodule add --name common git@github.com:TouchInstinct/$COMMON_REPO_NAME.git
+git submodule add --name build-scripts git@github.com:TouchInstinct/BuildScripts.git
 
-# do some stuff with provision profiles
+git submodule update --init
 
 # enable shared scheme
 
 # final clean up
-#### rm $PROJECT_CONFIG_FILENAME
-#### rm $PROJECT_XCODEGEN_FILENAME
+rm "project.yml"
 
 # commit state
 #### git commit -m "Setup project configuration"
