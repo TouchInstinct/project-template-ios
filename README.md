@@ -20,4 +20,5 @@
 
 Шаги после установки:
 
-- поменять версию Xcode project?
+- поменять версию Xcode project на Xcode-compatible 8.0
+- удалить Assets.xcassets из Compile Sources

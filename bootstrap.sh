@@ -33,6 +33,8 @@ rm -rf $(ls)
 # create git if not exists
 if [ ! -d .git ]; then
   git init
+else
+  echo "Git exists..."
 fi
 
 # source code project folder

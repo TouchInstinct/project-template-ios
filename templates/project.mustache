@@ -28,7 +28,10 @@ targets:
         runOnlyWhenInstalling: true
     sources:
       - path: {{project_name}}
-        buildPhase: sources
+        excludes:
+          - "Resources/LaunchScreen.storyboard"
+          - "Resources/Assets.xcassets/AppIcon.appiconset/Contents.json"
+          - "Info.plist"
       - path: {{project_name}}/Analytics
         buildPhase: sources
       - path: {{project_name}}/Cells
@@ -48,7 +51,7 @@ targets:
       - path: {{project_name}}/Realm
         buildPhase: sources
       - path: {{project_name}}/Resources
-        buildPhase: sources
+        buildPhase: resources
       - path: {{project_name}}/Services
         buildPhase: sources
       - path: {{project_name}}/Views
