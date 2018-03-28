@@ -10,43 +10,48 @@ function generate {
   rm data.yml
 }
 
-PROJECT_NAME=$1
-PROJECTS_PATH=$2
+# define variables
+PROJECTS_PATH=$1
+PROJECT_NAME=$2
+PROJECT_NAME_WITH_PREFIX=$2-ios
 COMMON_REPO_NAME=$3
 DEPLOYMENT_TARGET="10.0"
-
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 TEMPLATES=$CURRENT_DIR/templates
 
 cd $PROJECTS_PATH
 
 # main project folder
-mkdir -p $PROJECT_NAME
-cd $PROJECT_NAME
+echo "Clean up folders and files except .git folder..."
+mkdir -p $PROJECT_NAME_WITH_PREFIX
+cd $PROJECT_NAME_WITH_PREFIX
 
-echo "Clean up folders and files..."
+# remove project folder for sources and remove all files except .git folder
 rm -rf $PROJECT_NAME
 rm -rf $(ls)
 
-# TEST, REMOVE THIS LINE
-git init
+# create git if not exists
+if [ ! -d .git ]; then
+  git init
+fi
 
 # source code project folder
-echo "Recreate sources folders..."
-mkdir $PROJECT_NAME
+echo "Create sources folders..."
+mkdir -p $PROJECT_NAME
 
-# copy files
+# copy and generate source files
 cp -R $CURRENT_DIR/sources/project/. $PROJECT_NAME
 cp -R $CURRENT_DIR/sources/fastlane/. fastlane
-
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
+
+# generate file for generate xcodeproj
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/project.mustache project.yml
 
 # generate xcode project file
 echo "Generate xcodeproj file..."
-xcodegen # default to `project.yml`
+xcodegen --spec project.yml
 
-# creating .gitkeep
+# creating .gitkeep in each folder to enforce git stash this folder
 for folder in Analytics Cells Controllers Extensions Generated Models Networking Protocols Realm Resources/Localization Services Views; do
   touch $PROJECT_NAME/$folder/.gitkeep
 done
@@ -55,13 +60,15 @@ done
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
 pod install
 
-# configure git
+# configure git files
 cp $TEMPLATES/gitignore .gitignore
 cp $TEMPLATES/gitattributes .gitattributes
 
+# configure rambafile
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Rambafile.mustache Rambafile
 generamba template install
 
+# configure README.md
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/README.mustache README.md
 
 # configure submodules
@@ -70,11 +77,9 @@ git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
 
 git submodule update --init
 
-# enable shared scheme
-
 # final clean up
-#### rm "project.yml"
+rm "project.yml"
 
-# commit state
+# commit
 git add .
 git commit -m "Setup project configuration"
