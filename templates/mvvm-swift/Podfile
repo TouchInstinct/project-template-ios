@@ -20,9 +20,5 @@ target '<%= project_name %>' do
   pod 'SwiftLint'
 end
 
-target '<%= test_target_name %>' do
-  # pod 'LeadKit'
-end
-
 # If you have slow HDD
 ENV['COCOAPODS_DISABLE_STATS'] = "true"
