@@ -2,6 +2,8 @@
 
 PROJECT_NAME=$1
 PROJECTS_PATH=$2
+COMMON_REPO_NAME=$3
+
 CURRENT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TEMPLATES=$CURRENT_DIR/templates
 
@@ -43,6 +45,7 @@ mustache $PROJECT_CONFIG_FILENAME $TEMPLATES/project.mustache > $PROJECT_XCODEGE
 
 
 # generate xcode project file
+echo "Generate xcodeproj file..."
 xcodegen --spec $PROJECT_XCODEGEN_FILENAME
 
 
@@ -53,6 +56,10 @@ pod install
 # expand scripts
 
 # configure submodules
+git submodule add --name common git@github.com:TouchInstinct/$COMMON_REPO_NAME.git
+git submodule add --name build-scripts git@github.com:TouchInstinct/BuildScripts.git
+
+git submodule update --init
 
 # do some stuff with provision profiles
 
@@ -62,13 +69,5 @@ pod install
 rm $PROJECT_CONFIG_FILENAME
 rm $PROJECT_XCODEGEN_FILENAME
 
-
-# echo $PROJECT_NAME | liftoff
-#
-# cd $PROJECT_NAME
-#
-# git submodule add --name  git@github.com:TouchInstinct/$PROJECT_NAME-common.git
-# git submodule add --name code-quality git@github.com:TouchInstinct/code-quality-ios.git
-# git submodule add --name code-quality git@github.com:TouchInstinct/code-quality-ios.git
-#
-# git commit --amend -m "Project Started"
+# commit state
+git commit -m "Setup project configuration"
