@@ -47,16 +47,10 @@ cp -R $CURRENT_DIR/sources/fastlane/. fastlane
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
 
 # generate file for generate xcodeproj
-generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/project.mustache project.yml
-
-# generate xcconfig files
-mkdir -p Configs
 LOWERCASED_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
-generate "{project_name: $PROJECT_NAME, identifier: "ru.touchin.$LOWERCASED_PROJECT_NAME"}" $TEMPLATES/configuration.mustache Configs/StandardDebug.xcconfig
-generate "{project_name: $PROJECT_NAME, identifier: "ru.touchin.$LOWERCASED_PROJECT_NAME"}" $TEMPLATES/configuration.mustache Configs/StandardRelease.xcconfig
-
-generate "{project_name: $PROJECT_NAME, identifier: "com.touchin.$LOWERCASED_PROJECT_NAME"}" $TEMPLATES/configuration.mustache Configs/EnterpriseDebug.xcconfig
-generate "{project_name: $PROJECT_NAME, identifier: "com.touchin.$LOWERCASED_PROJECT_NAME"}" $TEMPLATES/configuration.mustache Configs/EnterpriseRelease.xcconfig
+generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET, project_name_lowecased: $LOWERCASED_PROJECT_NAME}" \
+  $TEMPLATES/project.mustache \
+  project.yml
 
 # generate xcode project file
 echo "Generate xcodeproj file..."
@@ -94,3 +88,6 @@ rm "project.yml"
 # commit
 git add .
 git commit -m "Setup project configuration"
+
+# open workspace
+open -a Xcode $PROJECT_NAME.xcworkspace
