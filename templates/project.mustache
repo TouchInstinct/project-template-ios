@@ -33,7 +33,7 @@ targets:
         name: Swiftlint
       - script: ". build-scripts/xcode/build_phases/copy_paste_detection.sh"
         name: CopyPaste Detection
-      - script: "\"${PODS_ROOT}/Fabric/run\" KEY_1 KEY_2"
+      - script: "\"${PODS_ROOT}/Fabric/run\" API_KEY_FROM_FABRIC Build_Secret"
         name: Fabric
         runOnlyWhenInstalling: true
     sources:
