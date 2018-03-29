@@ -11,6 +11,11 @@ configs:
   EnterpriseRelease: release
 targets:
   {{project_name}}:
+    configFiles:
+      StandardDebug: Configs/StandardDebug.xcconfig
+      StandardRelease: Configs/StandardRelease.xcconfig
+      EnterpriseDebug: Configs/EnterpriseDebug.xcconfig
+      EnterpriseRelease: Configs/EnterpriseRelease.xcconfig
     type: application
     platform: iOS
     prebuildScripts:
@@ -32,6 +37,7 @@ targets:
           - "Resources/LaunchScreen.storyboard"
           - "Resources/Assets.xcassets/AppIcon.appiconset/Contents.json"
           - "Info.plist"
+          - "*.xcconfig"
       - path: {{project_name}}/Analytics
         buildPhase: sources
       - path: {{project_name}}/Cells
