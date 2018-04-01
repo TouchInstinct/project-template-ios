@@ -48,8 +48,14 @@ cp -R $CURRENT_DIR/sources/fastlane/. fastlane
 # create each empty folder in location from file, except Resources, all folders with files inside
 for folder in `cat $CURRENT_DIR/foldernames.txt`; do
     echo "Creating $folder ..."
-    mkdir -p $folder
+    mkdir -p $PROJECT_NAME/$folder
 done
+
+# install required gems & brews
+cp $CURRENT_DIR/sources/Gemfile Gemfile
+cp $CURRENT_DIR/sources/Brewfile Brewfile
+bundle install
+brew bundle
 
 # create info plist
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
@@ -91,7 +97,9 @@ git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
 git submodule update --init
 
 # final clean up
-rm "project.yml"
+# rm  Gemfile*
+# rm  Brewfile*
+# rm project.yml
 
 # commit
 git add .

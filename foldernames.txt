@@ -6,6 +6,7 @@ Generated
 Models
 Networking
 Protocols
+Resources/Localization
 Realm
 Services
 Views

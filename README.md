@@ -14,7 +14,7 @@
 
 ### Шаг 2. Установка *Инструментов*
 
-- Поставить *Xcodegen*. Легче всего это можно сделать через [Homebrew](https://github.com/yonaskolb/XcodeGen#homebrew). Остальные способы можно прочитать там же на странице
+- Поставить *Xcodegen*???. Легче всего это можно сделать через [Homebrew](https://github.com/yonaskolb/XcodeGen#homebrew). Остальные способы можно прочитать там же на странице.
 - Поставить *mustache*. `sudo gem install mustache`
 
 ### Шаг 3. Запуск скрипта развертки проекта
