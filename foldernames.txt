@@ -7,6 +7,5 @@ Models
 Networking
 Protocols
 Realm
-Resources
 Services
 Views

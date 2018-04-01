@@ -16,7 +16,7 @@ PROJECT_NAME=$2
 PROJECT_NAME_WITH_PREFIX=$2-ios
 COMMON_REPO_NAME=$3
 DEPLOYMENT_TARGET="10.0"
-CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
+CURRENT_DIR=$(pwd)
 TEMPLATES=$CURRENT_DIR/templates
 
 cd $PROJECTS_PATH
@@ -44,6 +44,14 @@ mkdir -p $PROJECT_NAME
 # copy and generate source files
 cp -R $CURRENT_DIR/sources/project/. $PROJECT_NAME
 cp -R $CURRENT_DIR/sources/fastlane/. fastlane
+
+# create each empty folder in location from file, except Resources, all folders with files inside
+for folder in `cat $CURRENT_DIR/foldernames.txt`; do
+    echo "Creating $folder ..."
+    mkdir -p $folder
+done
+
+# create info plist
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
 
 # generate file for generate xcodeproj
