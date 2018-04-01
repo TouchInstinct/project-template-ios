@@ -12,12 +12,7 @@
 
 - Создать организацию в Фабрике и создать группу тестировщиков `touch-instinct`
 
-### Шаг 2. Установка *Инструментов*
-
-- Поставить *Xcodegen*???. Легче всего это можно сделать через [Homebrew](https://github.com/yonaskolb/XcodeGen#homebrew). Остальные способы можно прочитать там же на странице.
-- Поставить *mustache*. `sudo gem install mustache`
-
-### Шаг 3. Запуск скрипта развертки проекта
+### Шаг 2. Запуск скрипта развертки проекта
 
 Очень важно **НЕ ПЕРЕПУТАТЬ!!!** порядок параметров.
 
@@ -30,11 +25,60 @@
 - ПАРАМЕТР_1 = Родительская папка для расположения проекта, в ней будет создана папка проекта.
 - ПАРАМЕТР_2 = Имя проекта. Папка проекта будет создана с постфиксом `-ios`.
 
-> Пример: если ПАРАМЕТР_2 называется `Bank`, то папка проекта будет называться `Bank-ios`. Уже внутри папки проекта уже будут находится файлы `*.xcodeproj`, `*.xcodeworkspace`, `Podfile`, `Rambafile`, ...
+> Пример: если ПАРАМЕТР_2 называется `Bank`, то папка проекта будет называться `Bank-ios`. Уже внутри папки проекта уже будут находится остальные файлы. Пример
 
-- ПАРАМЕТР_3 = Название репозитория с общими строками, без указания расширения гит и названия компании. Пример: `Bank-Common`, `Bank2-Common`
+```sh
+├── Bank
+│   ├── Analytics
+│   ├── AppDelegate.swift
+│   ├── Cells
+│   ├── Controllers
+│   ├── Extensions
+│   ├── Generated
+│   │   └── models.swift
+│   ├── Info.plist
+│   ├── Models
+│   ├── Networking
+│   ├── Protocols
+│   ├── Realm
+│   ├── Resources
+│   │   ├── Assets.xcassets
+│   │   │   └── AppIcon.appiconset
+│   │   │       └── Contents.json
+│   │   ├── LaunchScreen.storyboard
+│   │   └── Localization
+│   │       ├── Base.lproj
+│   │       │   └── Localizable.strings
+│   │       ├── String+Localization.swift
+│   │       └── ru.lproj
+│   │           └── Localizable.strings
+│   ├── Services
+│   └── Views
+├── Bank.xcodeproj
+├── Bank.xcworkspace
+├── Downloads
+├── Podfile
+├── Podfile.lock
+├── Pods
+├── README.md
+├── Rambafile
+├── build-scripts
+├── common
+├── cpd-output.xml
+└── fastlane
+    └── Fastfile
 
-### Шаг 4. После установки:
+93 directories, 138 files
+
+```
+
+- ПАРАМЕТР_3 = Название репозитория с общими строками, без указания расширения `.git` и названия компании. Пример: `Bank-Common`, `Bank2-Common`. Пример скрипта
+
+```sh
+igorkislyuk$ ./bootstrap.sh ~/Documents/projects/ Bank BankSpbJur-common
+```
+
+### Шаг 3. После установки:
 
 - поменять версию `*.xcodeproject` на Xcode-compatible 8.0
 - **ВЫКЛЮЧИТЬ** автоматическое подписывание

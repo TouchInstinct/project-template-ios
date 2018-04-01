@@ -71,7 +71,7 @@ echo "Generate xcodeproj file..."
 xcodegen --spec project.yml
 
 # creating .gitkeep in each folder to enforce git stash this folder
-for folder in Analytics Cells Controllers Extensions Generated Models Networking Protocols Realm Resources/Localization Services Views; do
+for folder in `cat $CURRENT_DIR/foldernames.txt`; do
   touch $PROJECT_NAME/$folder/.gitkeep
 done
 
@@ -97,9 +97,9 @@ git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
 git submodule update --init
 
 # final clean up
-# rm  Gemfile*
-# rm  Brewfile*
-# rm project.yml
+rm  Gemfile*
+rm  Brewfile*
+rm project.yml
 
 # commit
 git add .
