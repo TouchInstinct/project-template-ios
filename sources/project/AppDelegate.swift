@@ -7,7 +7,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    lazy var appWindow: UIWindow = {
+    private(set) lazy var appWindow: UIWindow = {
         let window = UIWindow(frame: UIScreen.main.bounds)
 
         self.window = window
