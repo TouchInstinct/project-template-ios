@@ -1,4 +1,4 @@
-import_from_git(url: 'git@github.com:TouchInstinct/BuildScripts.git', path: 'xcode/commonFastfile')
+import "../build-scripts/xcode/commonFastfile"
 
 lane :StandardDebug do |options|
   buildConfiguration(options)
