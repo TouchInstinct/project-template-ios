@@ -86,6 +86,7 @@ done
 
 # install pods
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
+pod repo update
 pod install
 
 # configure git files
