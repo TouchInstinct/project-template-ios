@@ -1,0 +1,31 @@
+import LeadKit
+
+enum {{project_name}}NumberFormatType: NumberFormat {
+
+    /// `100` or `200`
+    case plain
+
+    static let allOptions: [{{project_name}}NumberFormatType] = [.plain]
+
+    var numberFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+
+        switch self {
+        case .plain:
+            formatter.numberStyle = .currencyAccounting
+            formatter.usesGroupingSeparator = false
+            formatter.maximumFractionDigits = 0
+            formatter.minimumIntegerDigits = 1
+        }
+
+        return formatter
+    }
+}
+
+final class {{project_name}}NumberFormatter: NumberFormattingService {
+
+    typealias NumberFormatType = {{project_name}}NumberFormatType
+
+    static let formatters = computedFormatters
+
+}

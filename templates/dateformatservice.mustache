@@ -1,0 +1,26 @@
+import LeadKit
+import SwiftDate
+
+enum {{project_name}}DateFormat: String, LeadKit.DateFormat {
+
+    case defaultDateFormat = "MM/dd/yyyy"
+
+    var swiftDateFormat: SwiftDate.DateFormat {
+        return SwiftDate.DateFormat.custom(rawValue)
+    }
+
+}
+
+final class {{project_name}}DateFormattingService: DateFormattingService, Singleton {
+
+    typealias DateFormatType = {{project_name}}DateFormat
+
+    var currentRegion: Region = .Local()
+
+    static let shared = {{project_name}}DateFormattingService()
+
+    private init() {
+        //
+    }
+
+}

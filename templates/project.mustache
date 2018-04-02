@@ -1,0 +1,78 @@
+name: {{project_name}}
+options:
+  createIntermediateGroups: true
+  xcodeVersion: 9.3
+  usesTabs: false
+  indentWidth: 4
+  deploymentTarget:
+    iOS: "{{deployment_target}}"
+configs:
+  StandardDebug: debug
+  StandardRelease: release
+  EnterpriseDebug: debug
+  EnterpriseRelease: release
+targets:
+  {{project_name}}:
+    settings:
+      base:
+        SWIFT_VERSION: 4.1
+        SWIFT_SWIFT3_OBJC_INFERENCE: On
+        CODE_SIGN_STYLE: Manual
+      configs:
+        StandardDebug:
+          PRODUCT_BUNDLE_IDENTIFIER: ru.touchin.{{project_name_lowecased}}
+        StandardRelease:
+          PRODUCT_BUNDLE_IDENTIFIER: ru.touchin.{{project_name_lowecased}}
+        EnterpriseDebug:
+          PRODUCT_BUNDLE_IDENTIFIER: com.touchin.{{project_name_lowecased}}
+        EnterpriseRelease:
+          PRODUCT_BUNDLE_IDENTIFIER: com.touchin.{{project_name_lowecased}}
+    type: application
+    platform: iOS
+    prebuildScripts:
+      - script: ". build-scripts/xcode/build_phases/localization.sh"
+        name: Localization
+      - script: ". build-scripts/xcode/build_phases/api_generator.sh 1.1.8"
+        name: API Genarator
+    postbuildScripts:
+      - script: ". build-scripts/xcode/build_phases/swiftlint.sh"
+        name: Swiftlint
+      - script: ". build-scripts/xcode/build_phases/copy_paste_detection.sh"
+        name: CopyPaste Detection
+      - script: "\"${PODS_ROOT}/Fabric/run\" API_KEY_FROM_FABRIC Build_Secret"
+        name: Fabric
+        runOnlyWhenInstalling: true
+    sources:
+      - path: {{project_name}}
+        excludes:
+          - "Resources/LaunchScreen.storyboard"
+          - "Resources/Assets.xcassets/AppIcon.appiconset/Contents.json"
+          - "Info.plist"
+      - path: {{project_name}}/Analytics
+        buildPhase: sources
+      - path: {{project_name}}/Appearance
+        buildPhase: sources
+      - path: {{project_name}}/Cells
+        buildPhase: sources
+      - path: {{project_name}}/Controllers
+        buildPhase: sources
+      - path: {{project_name}}/Extensions
+        buildPhase: sources
+      - path: {{project_name}}/Generated
+        buildPhase: sources
+      - path: {{project_name}}/Models
+        buildPhase: sources
+      - path: {{project_name}}/Networking
+        buildPhase: sources
+      - path: {{project_name}}/Protocols
+        buildPhase: sources
+      - path: {{project_name}}/Realm
+        buildPhase: sources
+      - path: {{project_name}}/Resources
+        buildPhase: resources
+      - path: {{project_name}}/Resources/Localization
+        buildPhase: resources
+      - path: {{project_name}}/Services
+        buildPhase: sources
+      - path: {{project_name}}/Views
+        buildPhase: sources
