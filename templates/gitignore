@@ -70,3 +70,4 @@ fastlane/test_output
 Downloads/
 fastlane/README.md
 Templates/
+cpd-output.xml
