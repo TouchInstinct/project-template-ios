@@ -97,8 +97,8 @@ git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
 git submodule update --init
 
 # final clean up
-rm  Gemfile*
-rm  Brewfile*
+rm Gemfile*
+rm Brewfile*
 rm project.yml
 
 # commit

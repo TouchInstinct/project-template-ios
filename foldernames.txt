@@ -8,5 +8,4 @@ Networking
 Protocols
 Resources/Localization
 Realm
-Services
 Views
