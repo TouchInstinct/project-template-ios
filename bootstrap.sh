@@ -53,6 +53,7 @@ done
 
 # install required gems & brews
 cp $CURRENT_DIR/sources/Gemfile Gemfile
+cp $CURRENT_DIR/sources/Gemfile.lock Gemfile.lock
 cp $CURRENT_DIR/sources/Brewfile Brewfile
 bundle install
 brew bundle
