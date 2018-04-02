@@ -25,6 +25,10 @@ ruby -v
 Если версия меньше, то в консоли необходимо выполнить следующие команды
 
 ```sh
+xcode-select --install
+```
+
+```sh
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
 ```
 
@@ -113,7 +117,6 @@ igorkislyuk$ ./bootstrap.sh ~/Documents/projects/ Bank BankSpbJur-common
 ### Шаг 4. После установки:
 
 - поменять версию `*.xcodeproject` на Xcode-compatible 8.0
-- **ВЫКЛЮЧИТЬ** автоматическое подписывание
 - выставить необходимые провижены для каждой конфигурации
 - *Опционально* при необходимости добавить конфигурации вручную
 - Вставить ключ фабрика в Info.plist
