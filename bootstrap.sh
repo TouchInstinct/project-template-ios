@@ -60,6 +60,14 @@ brew bundle
 # create info plist
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
 
+# generate services
+DATE_SERVICE_NAME="DateFormattingService"
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/dateformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$DATE_SERVICE_NAME".swift
+
+NUMBER_SERVICE_NAME="NumberFormattingService"
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/numberformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$NUMBER_SERVICE_NAME".swift
+
+
 # generate file for generate xcodeproj
 LOWERCASED_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET, project_name_lowecased: $LOWERCASED_PROJECT_NAME}" \
