@@ -14,6 +14,9 @@ configs:
 targets:
   {{project_name}}:
     settings:
+      base:
+        SWIFT_VERSION: 4.1
+        SWIFT_SWIFT3_OBJC_INFERENCE: On
       configs:
         StandardDebug:
           PRODUCT_BUNDLE_IDENTIFIER: ru.touchin.{{project_name_lowecased}}

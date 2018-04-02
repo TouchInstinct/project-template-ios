@@ -3,7 +3,7 @@ import SwiftDate
 
 enum {{project_name}}DateFormat: String, DateFormat {
 
-    case defaultDateFormat: "MM/dd/yyyy"
+    case defaultDateFormat = "MM/dd/yyyy"
 
     var swiftDateFormat: SwiftDate.DateFormat {
         return SwiftDate.DateFormat.custom(rawValue)
