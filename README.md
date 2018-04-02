@@ -118,4 +118,4 @@ igorkislyuk$ ./bootstrap.sh ~/Documents/projects/ Bank BankSpbJur-common
 - Вставить ключ фабрика в Info.plist
 - Перенести билд фазу `Fabric` в конец, и добавить к ней ключи организации
 - Проставить необходимые build-configuration для действий (run, build, profile) и сделать схему `shared`
-- Добавить
+- Добавить сгенерированные файлы других локазаций `Localizable.string`, которые находятся в папках (например, `ru.lproj`) в файл проекта через **Add files to...**
