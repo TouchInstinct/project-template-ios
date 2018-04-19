@@ -12,7 +12,6 @@ enum {{project_name}}NumberFormatType: NumberFormat {
 
         switch self {
         case .plain:
-            formatter.numberStyle = .currencyAccounting
             formatter.usesGroupingSeparator = false
             formatter.maximumFractionDigits = 0
             formatter.minimumIntegerDigits = 1
