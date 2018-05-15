@@ -118,7 +118,7 @@ igorkislyuk$ ./bootstrap.sh ~/Documents/projects/ Bank BankSpbJur-common
 - Открыть `Manage schemes` и выбрать корневую схему проекта. В графе "Container" выбрать workspace, а в графе "Shared" поставить напротив данной схемы галочку.
 - Отркыть `Edit scheme`, и проставить необходимые build-configuration для действий (run, build, profile).
 - В папке `common` cоздать папку `strings` (если такого еще нет), и в ней пустой файл `default_common_strings_ru.json` (или любая другая локализация, которая по-умолчанию используется на проекте).
-- Настроить fabric (подробнее можно посмотреть [тут](https://github.com/TouchInstinct/Styleguide/blob/master/IOS/Guides/Fabric_Guide.md).
+- Настроить fabric (подробнее можно посмотреть [тут](https://github.com/TouchInstinct/Styleguide/blob/master/IOS/Guides/Fabric_Guide.md)).
 - Собрать проект, убедиться, что все ок.
 - Добавить сгенерированные файлы других локазаций `Localizable.string`, которые находятся в папках (например, `ru.lproj`) в файл проекта через **Add files to...**.
 - Закоммитить и запушить все изменения в git. Создать PR из текущей ветки в `master`.
