@@ -33,6 +33,9 @@ rm -rf $(ls)
 # create git if not exists
 if [ ! -d .git ]; then
   git init
+  git remote add origin git@github.com:TouchInstinct/$PROJECT_NAME_WITH_PREFIX.git
+  git fetch
+  git checkout -t origin/master
 else
   echo "Git exists..."
 fi
@@ -112,6 +115,7 @@ rm Brewfile*
 rm project.yml
 
 # commit
+git checkout -b feature/setup_project
 git add .
 git commit -m "Setup project configuration"
 
