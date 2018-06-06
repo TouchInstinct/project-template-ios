@@ -11,13 +11,35 @@ function generate {
 }
 
 # define variables
-PROJECTS_PATH=$1
-PROJECT_NAME=$2
-PROJECT_NAME_WITH_PREFIX=$2-ios
-COMMON_REPO_NAME=${3:-$2-common}
-DEPLOYMENT_TARGET="10.0"
+PROJECT_TYPE=$1
+PROJECTS_PATH=$2
+PROJECT_NAME=$3
+
+case $PROJECT_TYPE in
+  project)
+    PROJECT_NAME_WITH_PREFIX=$3-ios
+    SCRIPT_MISC_FILES_DIR="project"
+    ;;
+  library)
+    PROJECT_NAME_WITH_PREFIX=$3
+    SCRIPT_MISC_FILES_DIR="library"
+    ;;
+  *)
+    echo "Please specify project type: \"project\" or \"library\""
+    exit 1
+    ;;
+esac
+
+DEPLOYMENT_TARGET_IOS="9.0"
+DEPLOYMENT_TARGET_WATCH_OS="2.0"
+DEPLOYMENT_TARGET_TV_OS="9.0"
+SWIFT_VERSION="4.1"
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
-TEMPLATES=$CURRENT_DIR/templates
+TEMPLATES=$CURRENT_DIR/$SCRIPT_MISC_FILES_DIR/templates
+SOURCES=$CURRENT_DIR/$SCRIPT_MISC_FILES_DIR/sources
+COMMON_SOURCES=$CURRENT_DIR/common/sources
+
+FOLDERNAMES=$CURRENT_DIR/$SCRIPT_MISC_FILES_DIR/foldernames.txt
 
 cd $PROJECTS_PATH
 
@@ -40,41 +62,74 @@ else
   echo "Git exists..."
 fi
 
-# source code project folder
-echo "Create sources folders..."
-mkdir -p $PROJECT_NAME
-
 # copy and generate source files
-cp -R $CURRENT_DIR/sources/project/. $PROJECT_NAME
-cp -R $CURRENT_DIR/sources/fastlane/. fastlane
+case $PROJECT_TYPE in
+  project)
+    # source code project folder
+    echo "Create sources folders..."
+    mkdir -p $PROJECT_NAME
 
-# create each empty folder in location from file, except Resources, all folders with files inside
-for folder in `cat $CURRENT_DIR/foldernames.txt`; do
-    echo "Creating $folder ..."
-    mkdir -p $PROJECT_NAME/$folder
-done
+    cp -R $SOURCES/project/. $PROJECT_NAME
+    cp -R $SOURCES/fastlane/. fastlane
+
+    # create each empty folder in location from file, except Resources, all folders with files inside
+    for folder in `cat $FOLDERNAMES`; do
+        echo "Creating $folder ..."
+        mkdir -p $PROJECT_NAME/$folder
+    done
+    ;;
+  library)
+    # create each empty folder in location from file, except Resources, all folders with files inside
+    for folder in `cat $FOLDERNAMES`; do
+        echo "Creating $folder ..."
+        mkdir -p Sources/$folder
+    done
+  ;;
+esac
 
 # install required gems & brews
-cp $CURRENT_DIR/sources/Gemfile Gemfile
-cp $CURRENT_DIR/sources/Gemfile.lock Gemfile.lock
-cp $CURRENT_DIR/sources/Brewfile Brewfile
+cp $SOURCES/Gemfile Gemfile
+cp $SOURCES/Gemfile.lock Gemfile.lock
+cp $COMMON_SOURCES/Brewfile Brewfile
 bundle install
 brew bundle
 
-# create info plist
-generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
+case $PROJECT_TYPE in
+  project)
+      # create info plist
+      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
 
-# generate services
-DATE_SERVICE_NAME="DateFormattingService"
-generate "{project_name: $PROJECT_NAME}" $TEMPLATES/dateformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$DATE_SERVICE_NAME".swift
+      # generate services
+      DATE_SERVICE_NAME="DateFormattingService"
+      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/dateformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$DATE_SERVICE_NAME".swift
 
-NUMBER_SERVICE_NAME="NumberFormattingService"
-generate "{project_name: $PROJECT_NAME}" $TEMPLATES/numberformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$NUMBER_SERVICE_NAME".swift
+      NUMBER_SERVICE_NAME="NumberFormattingService"
+      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/numberformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$NUMBER_SERVICE_NAME".swift
+      ;;
+    library)
+      # create info plists
+      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-iOS.plist
+      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-iOS-Extension.plist
+      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-watchOS.plist
+      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-tvOS.plist
 
+      # generate public header
+      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/PublicHeader.mustache Sources/$PROJECT_NAME.h
+
+      # copy example class
+      cp $TEMPLATES/ExampleClass.swift Sources/Classes/ExampleClass.swift
+
+      # generate podspec
+      generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGET_IOS, deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS, deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS, swift_version: $SWIFT_VERSION}" $TEMPLATES/podspec.mustache $PROJECT_NAME.podspec
+
+      # copy licence
+      cp $TEMPLATES/LICENSE LICENSE
+      ;;
+esac
 
 # generate file for generate xcodeproj
 LOWERCASED_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
-generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET, project_name_lowecased: $LOWERCASED_PROJECT_NAME}" \
+generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGET_IOS, deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS, deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS, swift_version: $SWIFT_VERSION, project_name_lowecased: $LOWERCASED_PROJECT_NAME}" \
   $TEMPLATES/project.mustache \
   project.yml
 
@@ -83,12 +138,21 @@ echo "Generate xcodeproj file..."
 xcodegen --spec project.yml
 
 # creating .gitkeep in each folder to enforce git stash this folder
-for folder in `cat $CURRENT_DIR/foldernames.txt`; do
-  touch $PROJECT_NAME/$folder/.gitkeep
-done
+case $PROJECT_TYPE in
+  project)
+    for folder in `cat $FOLDERNAMES`; do
+      touch $PROJECT_NAME/$folder/.gitkeep
+    done
+    ;;
+  library)
+    for folder in `cat $FOLDERNAMES`; do
+      touch Sources/$folder/.gitkeep
+    done
+  ;;
+esac
 
 # install pods
-generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
+generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGET_IOS, deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS, deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS}" $TEMPLATES/Podfile.mustache Podfile
 pod repo update
 pod install
 
@@ -96,16 +160,20 @@ pod install
 cp $TEMPLATES/gitignore .gitignore
 cp $TEMPLATES/gitattributes .gitattributes
 
-# configure rambafile
-generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Rambafile.mustache Rambafile
-generamba template install
-
 # configure README.md
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/README.mustache README.md
 
 # configure submodules
-git submodule add git@github.com:TouchInstinct/$COMMON_REPO_NAME.git common
 git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
+
+case $PROJECT_TYPE in
+  project)
+    # configure rambafile
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Rambafile.mustache Rambafile
+    generamba template install
+    git submodule add git@github.com:TouchInstinct/$COMMON_REPO_NAME.git common
+    ;;
+esac
 
 git submodule update --init
 
