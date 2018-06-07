@@ -96,38 +96,39 @@ brew bundle
 
 case $PROJECT_TYPE in
   project)
-      # create info plist
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
+    # create info plist
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache $PROJECT_NAME/Info.plist
 
-      # generate services
-      DATE_SERVICE_NAME="DateFormattingService"
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/dateformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$DATE_SERVICE_NAME".swift
+    # generate services
+    DATE_SERVICE_NAME="DateFormattingService"
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/dateformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$DATE_SERVICE_NAME".swift
 
-      NUMBER_SERVICE_NAME="NumberFormattingService"
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/numberformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$NUMBER_SERVICE_NAME".swift
+    NUMBER_SERVICE_NAME="NumberFormattingService"
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/numberformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$NUMBER_SERVICE_NAME".swift
 
-      TABLE_CONTENT_CONTROLLER_NAME="TableContentController"
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/tablecontentcontroller.mustache $PROJECT_NAME/Controllers/"$PROJECT_NAME$TABLE_CONTENT_CONTROLLER_NAME".swift
-      ;;
-    library)
-      # create info plists
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-iOS.plist
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-iOS-Extension.plist
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-watchOS.plist
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-tvOS.plist
+    TABLE_CONTENT_CONTROLLER_NAME="TableContentController"
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/tablecontentcontroller.mustache $PROJECT_NAME/Controllers/"$PROJECT_NAME$TABLE_CONTENT_CONTROLLER_NAME".swift
+  ;;
+  library)
+    # create info plists
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-iOS.plist
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-iOS-Extension.plist
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-watchOS.plist
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Info.mustache Sources/Info-tvOS.plist
 
-      # generate public header
-      generate "{project_name: $PROJECT_NAME}" $TEMPLATES/PublicHeader.mustache Sources/$PROJECT_NAME.h
+    # generate public header
+    generate "{project_name: $PROJECT_NAME}" $TEMPLATES/PublicHeader.mustache Sources/$PROJECT_NAME.h
 
-      # copy example class
-      cp $TEMPLATES/ExampleClass.swift Sources/Classes/ExampleClass.swift
+    # copy example class
+    cp $TEMPLATES/ExampleClass.swift Sources/Classes/ExampleClass.swift
 
-      # generate podspec
-      generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGET_IOS, deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS, deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS, swift_version: $SWIFT_VERSION}" $TEMPLATES/podspec.mustache $PROJECT_NAME.podspec
+    # generate podspec
+    generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGET_IOS, deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS, deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS, swift_version: $SWIFT_VERSION}" $TEMPLATES/podspec.mustache $PROJECT_NAME.podspec
 
-      # copy licence
-      cp $TEMPLATES/LICENSE LICENSE
-      ;;
+    # copy licence
+    cp $TEMPLATES/LICENSE LICENSE
+  ;;
+esac
 
 # generate file for generate xcodeproj
 LOWERCASED_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
