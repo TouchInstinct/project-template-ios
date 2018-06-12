@@ -1,0 +1,42 @@
+source 'https://github.com/CocoaPods/Specs'
+source 'https://github.com/TouchInstinct/Podspecs.git'
+
+abstract_target '{{project_name}}' do
+
+  use_frameworks!
+  inhibit_all_warnings!
+
+  # common pods
+  pod 'SwiftLint'
+
+  target '{{project_name}}-iOS' do
+    platform :ios, '{{deployment_target_ios}}'
+
+    # pods for iOS
+
+  end
+
+  target '{{project_name}}-iOS-Extension' do
+    platform :ios, '{{deployment_target_ios}}'
+
+    # pods for iOS Extension
+
+  end
+
+  target '{{project_name}}-watchOS' do
+    platform :watchos, '{{deployment_target_watch_os}}'
+
+    # pods for watchOS
+
+  end
+
+  target '{{project_name}}-tvOS' do
+    platform :tvos, '{{deployment_target_tv_os}}'
+
+    # pods for tvOS
+
+  end
+
+end
+
+ENV['COCOAPODS_DISABLE_STATS'] = "true"
