@@ -1,12 +1,16 @@
 import LeadKit
 import SwiftDate
 
-enum {{project_name}}DateFormat: String, LeadKit.DateFormat {
+enum {{project_name}}DateFormat: String, DateFormat {
 
-    case defaultDateFormat = "MM/dd/yyyy"
+    case defaultDate = "MM/dd/yyyy"
 
-    var swiftDateFormat: SwiftDate.DateFormat {
-        return SwiftDate.DateFormat.custom(rawValue)
+    var stringToDateFormat: StringToDateStyles {
+        return .custom(rawValue)
+    }
+
+    var dateToStringFormat: DateToStringStyles {
+        return .custom(rawValue)
     }
 
 }
@@ -15,12 +19,20 @@ final class {{project_name}}DateFormattingService: DateFormattingService, Single
 
     typealias DateFormatType = {{project_name}}DateFormat
 
-    var currentRegion: Region = .Local()
+    var currentRegion: Region = .local
 
     static let shared = {{project_name}}DateFormattingService()
 
     private init() {
         //
+    }
+
+}
+
+extension DateRepresentable {
+
+    func formatted(as format: {{project_name}}DateFormat) -> String {
+        return {{project_name}}DateFormattingService.string(from: self, format: format)
     }
 
 }
