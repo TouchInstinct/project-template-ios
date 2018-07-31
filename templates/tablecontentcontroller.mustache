@@ -1,0 +1,23 @@
+import LeadKit
+import RxKeyboard
+
+class {{project_name}}TableContentController<ViewModel>: BaseTableContentController<ViewModel> {
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
+    override func bindViews() {
+        super.bindViews()
+
+        bindBottomInsetBinding(from: RxKeyboard.instance.visibleHeight)
+    }
+
+    override func configureAppearance() {
+        super.configureAppearance()
+
+        view.backgroundColor = .white
+        tableView.showsVerticalScrollIndicator = false
+    }
+
+}

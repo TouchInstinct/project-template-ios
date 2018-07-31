@@ -71,6 +71,9 @@ generate "{project_name: $PROJECT_NAME}" $TEMPLATES/dateformatservice.mustache $
 NUMBER_SERVICE_NAME="NumberFormattingService"
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/numberformatservice.mustache $PROJECT_NAME/Services/"$PROJECT_NAME$NUMBER_SERVICE_NAME".swift
 
+TABLE_CONTENT_CONTROLLER_NAME="TableContentController"
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/tablecontentcontroller.mustache $PROJECT_NAME/Controllers/"$PROJECT_NAME$TABLE_CONTENT_CONTROLLER_NAME".swift
+
 
 # generate file for generate xcodeproj
 LOWERCASED_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
