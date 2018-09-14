@@ -21,10 +21,68 @@ enum {{project_name}}NumberFormatType: NumberFormat {
     }
 }
 
-final class {{project_name}}NumberFormatter: NumberFormattingService {
+final class {{project_name}}NumberFormatter: NumberFormattingService, Singleton {
 
     typealias NumberFormatType = {{project_name}}NumberFormatType
 
-    static let formatters = computedFormatters
+    let formatters = {{project_name}}NumberFormatter.computedFormatters
+
+    static let shared = {{project_name}}NumberFormatter()
+
+    private init() {
+        //
+    }
+
+}
+
+// MARK: - Number to string
+
+extension NSNumberConvertible {
+
+    func formatted(as format: {{project_name}}NumberFormatType) -> String {
+        return {{project_name}}NumberFormatter.string(from: asNSNumber(), format: format)
+    }
+
+}
+
+extension Optional where Wrapped: NSNumberConvertible {
+
+    func formatted(as format: {{project_name}}NumberFormatType, defaultString: String = "") -> String {
+        guard let number = value?.asNSNumber() else {
+            return defaultString
+        }
+
+        return {{project_name}}NumberFormatter.string(from: number, format: format)
+    }
+
+}
+
+// MARK: - String to number
+
+extension String {
+
+    func asNumber(using format: {{project_name}}NumberFormatType) -> NSNumber? {
+        return {{project_name}}NumberFormatter.number(from: self, format: format)
+    }
+
+    func asDecimal(using format: {{project_name}}NumberFormatType) -> NSDecimalNumber? {
+        guard let decimal = asNumber(using: format)?.decimalValue else {
+            return nil
+        }
+
+        return NSDecimalNumber(decimal: decimal)
+    }
+
+    func asInt(using format: {{project_name}}NumberFormatType) -> Int? {
+        return asNumber(using: format)?.intValue
+    }
+
+    func asInt64(using format: {{project_name}}NumberFormatType) -> Int64? {
+        return asNumber(using: format)?.int64Value
+    }
+
+    func asDouble(using format: {{project_name}}NumberFormatType) -> Double? {
+        return asNumber(using: format)?.doubleValue
+    }
 
 }
