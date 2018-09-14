@@ -19,7 +19,7 @@ final class {{project_name}}DateFormattingService: DateFormattingService, Single
 
     typealias DateFormatType = {{project_name}}DateFormat
 
-    var currentRegion: Region = .local
+    let currentRegion: Region = .local
 
     static let shared = {{project_name}}DateFormattingService()
 
@@ -33,6 +33,14 @@ extension DateRepresentable {
 
     func formatted(as format: {{project_name}}DateFormat) -> String {
         return {{project_name}}DateFormattingService.string(from: self, format: format)
+    }
+
+}
+
+extension String {
+
+    func asDate(using format: {{project_name}}DateFormat) -> DateInRegion? {
+        return {{project_name}}DateFormattingService.date(from: self, format: format)
     }
 
 }
