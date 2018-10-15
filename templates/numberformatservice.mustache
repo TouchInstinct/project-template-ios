@@ -48,11 +48,14 @@ extension NSNumberConvertible {
 extension Optional where Wrapped: NSNumberConvertible {
 
     func formatted(as format: {{project_name}}NumberFormatType, defaultString: String = "") -> String {
-        guard let number = value?.asNSNumber() else {
-            return defaultString
-        }
 
-        return {{project_name}}NumberFormatter.string(from: number, format: format)
+        switch self {
+        case let .some(value):
+            return {{project_name}}NumberFormatter.string(from: value.asNSNumber(), format: format)
+        default:
+            break
+        }
+        return defaultString
     }
 
 }
