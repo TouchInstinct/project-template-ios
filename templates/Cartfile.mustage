@@ -3,8 +3,6 @@ binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/LeadKitAddi
 binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/RxKeyboard/RxKeyboard.json"
 binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/Alamofire/Alamofire.json"
 binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/RxAlamofire/RxAlamofire.json"
-binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/Kingfisher/Kingfisher.json"
-binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/RxGesture/RxGesture.json"
 binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/RxOptional/RxOptional.json"
 binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/SwiftDate/SwiftDate.json"
 binary "https://raw.github.com/TouchInstinct/CarthageBinaries/master/CryptoSwift/CryptoSwift.json"
