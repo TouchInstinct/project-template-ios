@@ -32,7 +32,6 @@ final class {{project_name}}NumberFormatter: NumberFormattingService, Singleton 
     private init() {
         //
     }
-
 }
 
 // MARK: - Number to string
@@ -42,7 +41,6 @@ extension NSNumberConvertible {
     func formatted(as format: {{project_name}}NumberFormatType) -> String {
         return {{project_name}}NumberFormatter.string(from: asNSNumber(), format: format)
     }
-
 }
 
 extension Optional where Wrapped: NSNumberConvertible {
@@ -54,7 +52,6 @@ extension Optional where Wrapped: NSNumberConvertible {
         }
         return defaultString
     }
-
 }
 
 // MARK: - String to number
@@ -84,5 +81,4 @@ extension String {
     func asDouble(using format: {{project_name}}NumberFormatType) -> Double? {
         return asNumber(using: format)?.doubleValue
     }
-
 }
