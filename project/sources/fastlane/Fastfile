@@ -15,3 +15,14 @@ end
 lane :EnterpriseRelease do |options|
   buildConfiguration(options)
 end
+
+lane :AppStoreRelease do |options|
+  options[:uploadToAppStore] = true
+  buildConfiguration(options)
+end
+
+lane :SyncCodeSigning do |options|
+  options = merge_options_with_config_file(options)
+  options = options.merge(get_keychain_options(options))
+  syncCodeSigning(options)
+end

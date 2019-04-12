@@ -33,13 +33,16 @@ esac
 DEPLOYMENT_TARGET_IOS="9.0"
 DEPLOYMENT_TARGET_WATCH_OS="2.0"
 DEPLOYMENT_TARGET_TV_OS="9.0"
-SWIFT_VERSION="4.2"
+SWIFT_VERSION="5.0"
+XCODE_VERSION="10.2"
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 TEMPLATES=$CURRENT_DIR/$SCRIPT_MISC_FILES_DIR/templates
 SOURCES=$CURRENT_DIR/$SCRIPT_MISC_FILES_DIR/sources
 COMMON_SOURCES=$CURRENT_DIR/common/sources
 
 FOLDERNAMES=$CURRENT_DIR/$SCRIPT_MISC_FILES_DIR/foldernames.txt
+
+LOWERCASED_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
 
 cd $PROJECTS_PATH
 
@@ -71,6 +74,8 @@ case $PROJECT_TYPE in
 
     cp -R $SOURCES/project/. $PROJECT_NAME
     cp -R $SOURCES/fastlane/. fastlane
+
+    generate "{project_name_lowecased: $LOWERCASED_PROJECT_NAME}" $SOURCES/fastlane/configurations.mustache fastlane/configurations.yaml
 
     # create each empty folder in location from file, except Resources, all folders with files inside
     for folder in `cat $FOLDERNAMES`; do
@@ -123,7 +128,14 @@ case $PROJECT_TYPE in
     cp $TEMPLATES/ExampleClass.swift Sources/Classes/ExampleClass.swift
 
     # generate podspec
-    generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGET_IOS, deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS, deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS, swift_version: $SWIFT_VERSION}" $TEMPLATES/podspec.mustache $PROJECT_NAME.podspec
+    generate "{
+      project_name: $PROJECT_NAME,
+      deployment_target_ios: $DEPLOYMENT_TARGET_IOS,
+      deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS,
+      deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS,
+      swift_version: $SWIFT_VERSION,
+      xcode_version: $XCODE_VERSION
+    }" $TEMPLATES/podspec.mustache $PROJECT_NAME.podspec
 
     # copy licence
     cp $TEMPLATES/LICENSE LICENSE
@@ -131,14 +143,26 @@ case $PROJECT_TYPE in
 esac
 
 # generate file for generate xcodeproj
-LOWERCASED_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
-generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGET_IOS, deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS, deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS, swift_version: $SWIFT_VERSION, project_name_lowecased: $LOWERCASED_PROJECT_NAME}" \
+generate "{
+  project_name: $PROJECT_NAME,
+  deployment_target_ios: $DEPLOYMENT_TARGET_IOS,
+  deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS,
+  deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS,
+  swift_version: $SWIFT_VERSION,
+  xcode_version: $XCODE_VERSION,
+  project_name_lowecased: $LOWERCASED_PROJECT_NAME}" \
   $TEMPLATES/project.mustache \
   project.yml
+
+# install carthage
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Cartfile.mustache Cartfile
+carthage bootstrap
 
 # generate xcode project file
 echo "Generate xcodeproj file..."
 xcodegen --spec project.yml
+
+carting update -f list
 
 # creating .gitkeep in each folder to enforce git stash this folder
 case $PROJECT_TYPE in
@@ -155,13 +179,14 @@ case $PROJECT_TYPE in
 esac
 
 # install pods
-generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGET_IOS, deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS, deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS}" $TEMPLATES/Podfile.mustache Podfile
+generate "{
+  project_name: $PROJECT_NAME,
+  deployment_target_ios: $DEPLOYMENT_TARGET_IOS,
+  deployment_target_watch_os: $DEPLOYMENT_TARGET_WATCH_OS,
+  deployment_target_tv_os: $DEPLOYMENT_TARGET_TV_OS
+}" $TEMPLATES/Podfile.mustache Podfile
 pod repo update
 pod install
-
-# install carthage
-generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Cartfile.mustage Cartfile
-carthage update
 
 # configure git files
 cp $TEMPLATES/gitignore .gitignore
@@ -178,6 +203,7 @@ case $PROJECT_TYPE in
     # configure rambafile
     generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Rambafile.mustache Rambafile
     generamba template install
+    COMMON_REPO_NAME=$PROJECT_NAME-common
     git submodule add git@github.com:TouchInstinct/$COMMON_REPO_NAME.git common
     ;;
 esac
@@ -188,6 +214,9 @@ git submodule update --init
 rm Gemfile*
 rm Brewfile*
 rm project.yml
+
+# generate models, strings, etc
+xcodebuild -workspace $PROJECT_NAME.xcworkspace -scheme $PROJECT_NAME -configuration StandardDebug -sdk iphonesimulator
 
 # commit
 git checkout -b feature/setup_project

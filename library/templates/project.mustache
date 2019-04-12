@@ -1,7 +1,7 @@
 name: {{project_name}}
 options:
   createIntermediateGroups: true
-  xcodeVersion: 10.0
+  xcodeVersion: "{{xcode_version}}"
   usesTabs: false
   indentWidth: 4
   deploymentTarget:
@@ -16,40 +16,7 @@ targets:
         PRODUCT_NAME: "{{project_name}}"
         INFOPLIST_FILE: Sources/Info-iOS.plist
         SWIFT_VERSION: "{{swift_version}}"
-        SWIFT_SWIFT3_OBJC_INFERENCE: On
-    type: framework
-    platform: iOS
-    postbuildScripts:
-      - script: ". build-scripts/xcode/build_phases/swiftlint.sh Sources"
-        name: Swiftlint
-      - script: ". build-scripts/xcode/build_phases/copy_paste_detection.sh Sources"
-        name: CopyPaste Detection
-    sources:
-      - path: Sources
-        excludes:
-          - "*.plist"
-      - path: Sources/Classes
-        buildPhase: sources
-      - path: Sources/Enums
-        buildPhase: sources
-      - path: Sources/Extensions
-        buildPhase: sources
-      - path: Sources/Functions
-        buildPhase: sources
-      - path: Sources/Protocols
-        buildPhase: sources
-      - path: Sources/Structures
-        buildPhase: sources
-      - path: "Sources/{{project_name}}.h"
-        buildPhase: headers
-  {{project_name}}-iOS-Extension:
-    settings:
-      base:
-        PRODUCT_NAME: "{{project_name}}"
-        INFOPLIST_FILE: Sources/Info-iOS-Extension.plist
-        SWIFT_VERSION: "{{swift_version}}"
-        SWIFT_SWIFT3_OBJC_INFERENCE: On
-        APPLICATION_EXTENSION_API_ONLY: On
+        CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
     type: framework
     platform: iOS
     postbuildScripts:
@@ -81,7 +48,6 @@ targets:
         PRODUCT_NAME: "{{project_name}}"
         INFOPLIST_FILE: Sources/Info-watchOS.plist
         SWIFT_VERSION: "{{swift_version}}"
-        SWIFT_SWIFT3_OBJC_INFERENCE: On
     type: framework
     platform: watchOS
     postbuildScripts:
@@ -113,7 +79,6 @@ targets:
         PRODUCT_NAME: "{{project_name}}"
         INFOPLIST_FILE: Sources/Info-tvOS.plist
         SWIFT_VERSION: "{{swift_version}}"
-        SWIFT_SWIFT3_OBJC_INFERENCE: On
     type: framework
     platform: tvOS
     postbuildScripts:

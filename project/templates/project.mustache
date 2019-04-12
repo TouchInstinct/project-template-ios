@@ -1,7 +1,7 @@
 name: {{project_name}}
 options:
   createIntermediateGroups: true
-  xcodeVersion: 10.0
+  xcodeVersion: "{{xcode_version}}"
   usesTabs: false
   indentWidth: 4
   deploymentTarget:
@@ -11,13 +11,14 @@ configs:
   StandardRelease: release
   EnterpriseDebug: debug
   EnterpriseRelease: release
+  AppStore: release
 targets:
   {{project_name}}:
     settings:
       base:
-        SWIFT_VERSION: 4.2
-        SWIFT_SWIFT3_OBJC_INFERENCE: On
+        SWIFT_VERSION: "{{swift_version}}"
         CODE_SIGN_STYLE: Manual
+        CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
       configs:
         StandardDebug:
           PRODUCT_BUNDLE_IDENTIFIER: ru.touchin.{{project_name_lowecased}}
@@ -27,12 +28,27 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: com.touchin.{{project_name_lowecased}}
         EnterpriseRelease:
           PRODUCT_BUNDLE_IDENTIFIER: com.touchin.{{project_name_lowecased}}
+        AppStore:
+          PRODUCT_BUNDLE_IDENTIFIER: customer.bundle.id
     type: application
     platform: iOS
+    dependencies:
+      - carthage: Alamofire
+      - carthage: TableKit
+      - carthage: SnapKit
+      - carthage: SwiftDate
+      - carthage: LeadKit
+      - carthage: RxAtomic
+      - carthage: RxSwift
+      - carthage: RxCocoa
+      - carthage: RxAlamofire
+      - carthage: RxOptional
+      - carthage: Rxkeyboard
+      - carthage: UIScrollView_InfiniteScroll
     prebuildScripts:
       - script: ". build-scripts/xcode/build_phases/localization.sh"
         name: Localization
-      - script: ". build-scripts/xcode/build_phases/api_generator.sh 1.1.35"
+      - script: ". build-scripts/xcode/build_phases/api_generator.sh 1.2.20"
         name: API Generator
     postbuildScripts:
       - script: ". build-scripts/xcode/build_phases/swiftlint.sh"
@@ -69,8 +85,12 @@ targets:
       - path: {{project_name}}/Realm
         buildPhase: sources
       - path: {{project_name}}/Resources
+        excludes:
+          - "Localization"
         buildPhase: resources
       - path: {{project_name}}/Resources/Localization
+        excludes:
+          - "String+Localization.swift"
         buildPhase: resources
       - path: {{project_name}}/Services
         buildPhase: sources
