@@ -159,6 +159,10 @@ generate "{project_name: $PROJECT_NAME, deployment_target_ios: $DEPLOYMENT_TARGE
 pod repo update
 pod install
 
+# install carthage
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Cartfile.mustage Cartfile
+carthage update
+
 # configure git files
 cp $TEMPLATES/gitignore .gitignore
 cp $TEMPLATES/gitattributes .gitattributes
