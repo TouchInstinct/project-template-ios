@@ -123,6 +123,10 @@ cp $CURRENT_DIR/additional/Brewfile Brewfile
 bundle install
 brew bundle
 
+# add fastlane plugins
+bundle exec fastlane add_plugin firebase_app_distribution
+bundle exec fastlane add_plugin badge
+
 # copy setup, install and update commands
 cp $CURRENT_DIR/additional/setup.command setup.command
 cp $CURRENT_DIR/additional/install_dependencies.command install_dependencies.command

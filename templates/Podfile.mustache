@@ -15,9 +15,11 @@ project '{{project_name}}', {
 target '{{project_name}}' do
 
   # System
-  pod 'Firebase/Crashlytics'
   pod 'SwiftLint', '0.39.1'
   pod 'LicensePlist'
+  pod 'Firebase/Crashlytics'
+  pod 'Firebase/Performance'
+  pod 'Firebase/Analytics' # for Firebase/Performance
 
   # Rx
   pod 'RxKeyboard', '0.9.0'
