@@ -1,6 +1,4 @@
 import UIKit
-import Fabric
-import Crashlytics
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
