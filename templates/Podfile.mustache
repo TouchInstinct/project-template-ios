@@ -7,16 +7,44 @@ use_frameworks!
 inhibit_all_warnings!
 
 project '{{project_name}}', {
-    'StandardDebug' => :debug,
-    'EnterpriseDebug' => :debug,
-    'StandardRelease' => :release,
-    'EnterpriseRelease' => :release
+    'AppStore' => :release,
+    'Release' => :release,
+    'Debug' => :debug
 }
 
 target '{{project_name}}' do
-  pod 'Fabric'
-  pod 'Crashlytics'
-  pod 'SwiftLint'
+
+  # System
+  pod 'Firebase/Crashlytics'
+  pod 'SwiftLint' 
+  pod 'LicensePlist'
+
+  # Rx
+  pod 'RxSwift', '4.5.0'
+  pod 'RxOptional', '3.6.2'
+  pod 'RxKeyboard', '0.9.0'
+  pod 'RxAlamofire', '4.3.0'
+
+  # Security
+  pod 'KeychainAccess'
+
+  # Networking
+  pod 'Alamofire', '4.8.1'
+
+  # Utils
+  pod 'LeadKit'
+  pod 'LeadKitAdditions'
+  pod 'DeviceKit'
+  pod 'SwiftValidator'
+  pod 'SwiftDate'
+
+  # Layout
+  pod 'SnapKit'
+
+   # UI
+  pod 'TableKit'
+  pod 'StatefulViewController'
+
 end
 
 # If you have slow HDD

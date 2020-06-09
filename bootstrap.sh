@@ -15,7 +15,7 @@ PROJECTS_PATH=$1
 PROJECT_NAME=$2
 PROJECT_NAME_WITH_PREFIX=$2-ios
 COMMON_REPO_NAME=${3:-$2-common}
-DEPLOYMENT_TARGET="10.0"
+DEPLOYMENT_TARGET="12.0"
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 TEMPLATES=$CURRENT_DIR/templates
 
@@ -94,10 +94,6 @@ done
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
 pod repo update
 pod install
-
-# install carthage
-generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Cartfile.mustage Cartfile
-carthage update
 
 # configure git files
 cp $TEMPLATES/gitignore .gitignore

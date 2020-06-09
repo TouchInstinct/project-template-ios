@@ -4,7 +4,6 @@ Cells
 Controllers
 Extensions
 Generated
-Models
 Networking
 Protocols
 Resources/Localization

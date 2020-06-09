@@ -1,16 +1,15 @@
 name: {{project_name}}
 options:
   createIntermediateGroups: true
-  xcodeVersion: 10.0
+  xcodeVersion: 13.0
   usesTabs: false
   indentWidth: 4
   deploymentTarget:
     iOS: "{{deployment_target}}"
 configs:
-  StandardDebug: debug
-  StandardRelease: release
-  EnterpriseDebug: debug
-  EnterpriseRelease: release
+  AppStore: release
+  Release: release
+  Debug :debug
 targets:
   {{project_name}}:
     settings:
@@ -19,14 +18,15 @@ targets:
         SWIFT_SWIFT3_OBJC_INFERENCE: On
         CODE_SIGN_STYLE: Manual
       configs:
-        StandardDebug:
+        Debug:
           PRODUCT_BUNDLE_IDENTIFIER: ru.touchin.{{project_name_lowecased}}
-        StandardRelease:
-          PRODUCT_BUNDLE_IDENTIFIER: ru.touchin.{{project_name_lowecased}}
-        EnterpriseDebug:
+          GOOGLE_SERVICE_INFO_PLIST_PATH: $(SRCROOT)/$(TARGET_NAME)/Resources/Standard-GoogleService-Info.plist
+        Release:
           PRODUCT_BUNDLE_IDENTIFIER: com.touchin.{{project_name_lowecased}}
-        EnterpriseRelease:
+          GOOGLE_SERVICE_INFO_PLIST_PATH: $(SRCROOT)/$(TARGET_NAME)/Resources/Enterprise-GoogleService-Info.plist
+        AppStore:
           PRODUCT_BUNDLE_IDENTIFIER: com.touchin.{{project_name_lowecased}}
+          GOOGLE_SERVICE_INFO_PLIST_PATH: $(SRCROOT)/$(TARGET_NAME)/Resources/AppStore-GoogleService-Info.plist
     type: application
     platform: iOS
     prebuildScripts:
@@ -39,8 +39,8 @@ targets:
         name: Swiftlint
       - script: ". build-scripts/xcode/build_phases/copy_paste_detection.sh"
         name: CopyPaste Detection
-      - script: "\"${PODS_ROOT}/Fabric/run\" API_KEY_FROM_FABRIC Build_Secret"
-        name: Fabric
+      - script: "\"${PODS_ROOT}/FirebaseCrashlytics/run\" --google-service-plist ${GOOGLE_SERVICE_INFO_PLIST_PATH}"
+        name: Firebase
         runOnlyWhenInstalling: true
     sources:
       - path: {{project_name}}
@@ -59,8 +59,6 @@ targets:
       - path: {{project_name}}/Extensions
         buildPhase: sources
       - path: {{project_name}}/Generated
-        buildPhase: sources
-      - path: {{project_name}}/Models
         buildPhase: sources
       - path: {{project_name}}/Networking
         buildPhase: sources
