@@ -9,6 +9,9 @@ enum FirebaseConfigurator {
         return "Enterprise-GoogleService-Info"
         #elseif STANDARD
         return "Standard-GoogleService-Info"
+        #else
+        assertionFailure("There is no right plist file")
+        return .empty
         #endif
     }
 

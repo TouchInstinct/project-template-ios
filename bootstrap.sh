@@ -123,6 +123,11 @@ cp $CURRENT_DIR/additional/Brewfile Brewfile
 bundle install
 brew bundle
 
+# copy setup, install and update commands
+cp $CURRENT_DIR/additional/setup.command setup.command
+cp $CURRENT_DIR/additional/install_dependencies.command install_dependencies.command
+cp $CURRENT_DIR/additional/update_dependencies.command update_dependencies.command
+
 # commit
 git checkout -b feature/setup_project
 git add .
