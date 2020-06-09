@@ -48,7 +48,7 @@ mkdir -p $PROJECT_NAME
 cp -R $CURRENT_DIR/sources/project/. $PROJECT_NAME
 cp -R $CURRENT_DIR/sources/fastlane/. fastlane
 
-# create each empty folder in location from file, except Resources, all folders with files inside
+# create each empty folder in location from file, except Resources, Models and Appearance, all folders with files inside
 for folder in `cat $CURRENT_DIR/foldernames.txt`; do
     echo "Creating $folder ..."
     mkdir -p $PROJECT_NAME/$folder
