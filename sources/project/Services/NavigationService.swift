@@ -1,6 +1,6 @@
 import UIKit
 
-struct NavigationService {
+enum NavigationService {
     static var appWindow: UIWindow {
         return AppDelegate.shared.appWindow
     }

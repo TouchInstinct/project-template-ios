@@ -1,6 +1,4 @@
 import UIKit
-import Fabric
-import Crashlytics
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,7 +26,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        Fabric.with([Crashlytics.self])
+        FirebaseConfigurator.configure()
         return true
     }
 }

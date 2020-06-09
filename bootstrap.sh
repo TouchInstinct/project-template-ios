@@ -15,7 +15,7 @@ PROJECTS_PATH=$1
 PROJECT_NAME=$2
 PROJECT_NAME_WITH_PREFIX=$2-ios
 COMMON_REPO_NAME=${3:-$2-common}
-DEPLOYMENT_TARGET="10.0"
+DEPLOYMENT_TARGET="12.0"
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 TEMPLATES=$CURRENT_DIR/templates
 
@@ -48,7 +48,7 @@ mkdir -p $PROJECT_NAME
 cp -R $CURRENT_DIR/sources/project/. $PROJECT_NAME
 cp -R $CURRENT_DIR/sources/fastlane/. fastlane
 
-# create each empty folder in location from file, except Resources, all folders with files inside
+# create each empty folder in location from file, except Resources, Models and Appearance, all folders with files inside
 for folder in `cat $CURRENT_DIR/foldernames.txt`; do
     echo "Creating $folder ..."
     mkdir -p $PROJECT_NAME/$folder
@@ -95,10 +95,6 @@ generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" 
 pod repo update
 pod install
 
-# install carthage
-generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Cartfile.mustage Cartfile
-carthage update
-
 # configure git files
 cp $TEMPLATES/gitignore .gitignore
 cp $TEMPLATES/gitattributes .gitattributes
@@ -120,6 +116,21 @@ git submodule update --init
 rm Gemfile*
 rm Brewfile*
 rm project.yml
+
+# install additional gems & brews
+cp $CURRENT_DIR/additional/Gemfile Gemfile
+cp $CURRENT_DIR/additional/Brewfile Brewfile
+bundle install
+brew bundle
+
+# add fastlane plugins
+bundle exec fastlane add_plugin firebase_app_distribution
+bundle exec fastlane add_plugin badge
+
+# copy setup, install and update commands
+cp $CURRENT_DIR/additional/setup.command setup.command
+cp $CURRENT_DIR/additional/install_dependencies.command install_dependencies.command
+cp $CURRENT_DIR/additional/update_dependencies.command update_dependencies.command
 
 # commit
 git checkout -b feature/setup_project
