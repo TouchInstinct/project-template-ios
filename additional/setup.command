@@ -11,4 +11,4 @@ brew bundle
 bundle install
 
 # Обновляем репозиторий подов и запускаем их установку.
-bundle exec pod pod install --repo-update
+bundle exec pod install --repo-update
