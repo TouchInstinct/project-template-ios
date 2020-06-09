@@ -10,8 +10,5 @@ brew bundle
 # Cocoapods and Fastlane
 bundle install
 
-# Обновляем репозиторий подов.
-bundle exec pod repo update
-
-# Запускаем установку подов.
-bundle exec pod install
+# Обновляем репозиторий подов и запускаем их установку.
+bundle exec pod pod install --repo-update
