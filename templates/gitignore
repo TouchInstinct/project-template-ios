@@ -71,4 +71,5 @@ Downloads/
 fastlane/README.md
 Templates/
 cpd-output.xml
+*.swp
 *IDEWorkspaceChecks.plist
