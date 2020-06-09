@@ -117,6 +117,12 @@ rm Gemfile*
 rm Brewfile*
 rm project.yml
 
+# install additional gems & brews
+cp $CURRENT_DIR/additional/Gemfile Gemfile
+cp $CURRENT_DIR/additional/Brewfile Brewfile
+bundle install
+brew bundle
+
 # commit
 git checkout -b feature/setup_project
 git add .

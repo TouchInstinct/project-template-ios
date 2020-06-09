@@ -3,7 +3,7 @@ import Firebase
 enum FirebaseConfigurator {
 
     private static var resourceName: String {
-        #if APPSTORE || STAGE
+        #if APPSTORE
         return "AppStore-GoogleService-Info"
         #elseif ENTERPRISE
         return "Enterprise-GoogleService-Info"
