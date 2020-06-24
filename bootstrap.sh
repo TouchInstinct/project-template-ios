@@ -127,10 +127,16 @@ brew bundle
 bundle exec fastlane add_plugin firebase_app_distribution
 bundle exec fastlane add_plugin badge
 
+#yarn
+yarn install
+
 # copy setup, install and update commands
 cp $CURRENT_DIR/additional/setup.command setup.command
 cp $CURRENT_DIR/additional/install_dependencies.command install_dependencies.command
 cp $CURRENT_DIR/additional/update_dependencies.command update_dependencies.command
+
+#copy package for firebase
+cp $CURRENT_DIR/additional/package.json package.json
 
 # commit
 git checkout -b feature/setup_project
