@@ -1,7 +1,7 @@
 name: {{project_name}}
 options:
   createIntermediateGroups: true
-  xcodeVersion: 10.0
+  xcodeVersion: 11.0
   usesTabs: false
   indentWidth: 4
   deploymentTarget:
@@ -14,7 +14,7 @@ targets:
   {{project_name}}:
     settings:
       base:
-        SWIFT_VERSION: 4.2
+        SWIFT_VERSION: 5.0
         SWIFT_SWIFT3_OBJC_INFERENCE: On
         CODE_SIGN_STYLE: Manual
       configs:
@@ -32,7 +32,7 @@ targets:
     prebuildScripts:
       - script: ". build-scripts/xcode/build_phases/localization.sh"
         name: Localization
-      - script: ". build-scripts/xcode/build_phases/api_generator.sh 1.4.0-alpha1"
+      - script: ". build-scripts/xcode/build_phases/api_generator.sh 1.4.0-beta4"
         name: API Generator
     postbuildScripts:
       - script: ". build-scripts/xcode/build_phases/swiftlint.sh"
@@ -61,8 +61,6 @@ targets:
       - path: {{project_name}}/Networking
         buildPhase: sources
       - path: {{project_name}}/Protocols
-        buildPhase: sources
-      - path: {{project_name}}/Realm
         buildPhase: sources
       - path: {{project_name}}/Resources
         buildPhase: resources

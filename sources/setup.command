@@ -6,6 +6,10 @@ cd "$DIR"
 # Устанавливаем необходимые пакеты через Homebrew
 brew bundle
 
+# Устанавливаем bundler
+
+gem install bundler
+
 # Устанавливаем ruby зависимости.
 # Cocoapods and Fastlane
 bundle install

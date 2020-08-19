@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# set -x # debug
+
 function generate {
   PARAMS=$1
   TEMPLATE_PATH=$2
@@ -58,7 +60,10 @@ done
 cp $CURRENT_DIR/sources/Gemfile Gemfile
 cp $CURRENT_DIR/sources/Gemfile.lock Gemfile.lock
 cp $CURRENT_DIR/sources/Brewfile Brewfile
+
+gem install bundler
 bundle install
+
 brew bundle
 
 # create info plist
@@ -92,8 +97,7 @@ done
 
 # install pods
 generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET}" $TEMPLATES/Podfile.mustache Podfile
-pod repo update
-pod install
+bundle exec pod install --repo-update
 
 # configure git files
 cp $TEMPLATES/gitignore .gitignore
@@ -101,7 +105,7 @@ cp $TEMPLATES/gitattributes .gitattributes
 
 # configure rambafile
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/Rambafile.mustache Rambafile
-generamba template install
+bundle exec generamba template install
 
 # configure README.md
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/README.mustache README.md
@@ -113,30 +117,22 @@ git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
 git submodule update --init
 
 # final clean up
-rm Gemfile*
-rm Brewfile*
 rm project.yml
 
-# install additional gems & brews
-cp $CURRENT_DIR/additional/Gemfile Gemfile
+# install additional brews
 cp $CURRENT_DIR/additional/Brewfile Brewfile
-bundle install
 brew bundle
 
-# add fastlane plugins
-bundle exec fastlane add_plugin firebase_app_distribution
-bundle exec fastlane add_plugin badge
-
 #copy package for firebase
-cp $CURRENT_DIR/additional/package.json package.json
+cp $CURRENT_DIR/sources/package.json package.json
 
 #yarn
 yarn install
 
 # copy setup, install and update commands
-cp $CURRENT_DIR/additional/setup.command setup.command
-cp $CURRENT_DIR/additional/install_dependencies.command install_dependencies.command
-cp $CURRENT_DIR/additional/update_dependencies.command update_dependencies.command
+cp $CURRENT_DIR/sources/setup.command setup.command
+cp $CURRENT_DIR/sources/install_dependencies.command install_dependencies.command
+cp $CURRENT_DIR/sources/update_dependencies.command update_dependencies.command
 
 # commit
 git checkout -b feature/setup_project
@@ -144,4 +140,4 @@ git add .
 git commit -m "Setup project configuration"
 
 # open workspace
-open -a Xcode $PROJECT_NAME.xcworkspace
+open $PROJECT_NAME.xcworkspace
