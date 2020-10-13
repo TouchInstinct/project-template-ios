@@ -1,0 +1,24 @@
+targets:
+  {{project_name}}:
+    development:
+      PROVISIONING_PROFILE_SPECIFIER: "match Development ru.touchin.{{project_name_lowecased}}"
+      PRODUCT_BUNDLE_IDENTIFIER: "ru.touchin.{{project_name_lowecased}}"
+    enterprise:
+      PROVISIONING_PROFILE_SPECIFIER: "match InHouse com.touchin.{{project_name_lowecased}}"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.touchin.{{project_name_lowecased}}"
+    appstore:
+      PROVISIONING_PROFILE_SPECIFIER: "***"
+      PRODUCT_BUNDLE_IDENTIFIER: "***"
+
+types:
+  development:
+    apple_id: "apple@touchin.ru"
+    team_id: "D4HA43V467"
+    itc_team_id: "1426360"
+  enterprise:
+    apple_id: "enterpriseapple@touchin.ru"
+    team_id: "228J5MMU7S"
+  appstore:
+    apple_id: "apple@touchin.ru"
+    team_id: "***"
+    itc_team_id: "***"
