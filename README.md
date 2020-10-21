@@ -108,7 +108,7 @@ gem install bundle
 - ПАРАМЕТР_3 (Опициональный) = Название репозитория с общими строками, без указания расширения `.git` и названия компании. Пример: `Bank-Common`, `Bank2-Common`. Если не указывать параметр, то будет использоваться имя проекта с постфиксом `-common`. Пример скрипта
 
 ```sh
-igorkislyuk$ ./bootstrap.sh ~/Documents/projects/ Bank BankSpbJur-common
+igorkislyuk$ ./bootstrap.sh ~/Documents/projects/ Bank Bank-common
 ```
 
 ### Шаг 4. После установки:
