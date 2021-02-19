@@ -92,9 +92,9 @@ iOSInjectionProject/
 # homebrew-bundle
 Brewfile.lock.json
 
-# Node.js
+# Ruby gems
 # Dependency directories
-node_modules/
+*.gem
 
 # Touch Instinct custom
 Downloads/
