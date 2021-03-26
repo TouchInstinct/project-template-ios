@@ -96,7 +96,7 @@ aggregateTargets:
     buildScripts:
       - name: Check Pods Manifest.lock
         script: |
-          readonly PODS_ROOT=${SRCROOT}/Pods
+          readonly PODS_ROOT="${SRCROOT}/Pods"
           . ${SRCROOT}/build_phases/check_pods_manifest.sh
         inputFiles:
         - ${SRCROOT}/Podfile.lock
@@ -106,8 +106,8 @@ aggregateTargets:
 
       - name: Swiftlint
         script: |
-          readonly PODS_ROOT=${SRCROOT}/Pods
-          readonly SCRIPT_DIR=${SRCROOT}/build-scripts/xcode/build_phases
+          readonly PODS_ROOT="${SRCROOT}/Pods"
+          readonly SCRIPT_DIR="${SRCROOT}/build-scripts/xcode/build_phases"
           . ${SCRIPT_DIR}/swiftlint.sh
         inputFileLists:
         - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
@@ -115,7 +115,7 @@ aggregateTargets:
 
       - name: CopyPaste Detection
         script: |
-          readonly SCRIPT_DIR=${SRCROOT}/build-scripts/xcode/build_phases
+          readonly SCRIPT_DIR="${SRCROOT}/build-scripts/xcode/build_phases"
           . build-scripts/xcode/build_phases/copy_paste_detection.sh Localization Generated Pods
         inputFileLists:
         - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
