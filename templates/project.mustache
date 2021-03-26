@@ -97,7 +97,7 @@ aggregateTargets:
       - name: Check Pods Manifest.lock
         script: |
           readonly PODS_ROOT=${SRCROOT}/Pods
-          . $(SRCROOT)/build_phases/check_pods_manifest.sh
+          . ${SRCROOT}/build_phases/check_pods_manifest.sh
         inputFiles:
         - ${SRCROOT}/Podfile.lock
         - ${PODS_ROOT}/Manifest.lock
