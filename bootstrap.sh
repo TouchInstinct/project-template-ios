@@ -34,16 +34,6 @@ cd $PROJECT_NAME_WITH_PREFIX
 rm -rf $PROJECT_NAME
 rm -rf $(ls)
 
-# create git if not exists
-if [ ! -d .git ]; then
-  git init
-  git remote add origin ${GIT_URL}
-  git fetch
-  git checkout -t origin/master
-else
-  echo "Git exists..."
-fi
-
 # source code project folder
 echo "Create sources folders..."
 mkdir -p $PROJECT_NAME
@@ -92,6 +82,9 @@ generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET, p
 echo "Generate xcodeproj file..."
 xcodegen --spec project.yml
 
+# generate code lint folders
+generate "{project_name: $PROJECT_NAME" $TEMPLATES/build_phases/code_lint_folders.mustache build_phases/code_lint_folders.xcfilelist
+
 # creating .gitkeep in each folder to enforce git stash this folder
 for folder in `cat $CURRENT_DIR/foldernames.txt`; do
   touch $PROJECT_NAME/$folder/.gitkeep
@@ -104,6 +97,12 @@ bundle exec pod install --repo-update
 # configure git files
 cp $TEMPLATES/gitignore .gitignore
 cp $TEMPLATES/gitattributes .gitattributes
+
+# configure git hooks
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/githooks/post-merge.mustache .githooks/post-merge
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/githooks/pre-commit.mustache .githooks/pre-commit
+
+git config --local core.hooksPath .githooks
 
 # configure fastlane
 

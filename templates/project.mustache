@@ -1,4 +1,5 @@
 name: {{project_name}}
+
 options:
   createIntermediateGroups: true
   xcodeVersion: 11.0
@@ -6,10 +7,12 @@ options:
   indentWidth: 4
   deploymentTarget:
     iOS: "{{deployment_target}}"
+
 configs:
   AppStore: release
   Release: release
   Debug: debug
+
 targets:
   {{project_name}}:
     settings:
@@ -70,3 +73,47 @@ targets:
         buildPhase: sources
       - path: {{project_name}}/Views
         buildPhase: sources
+
+  aggregateTargets:
+    CodeGen:
+      buildScripts:
+        - name: Localization
+          script: readonly PRODUCT_NAME="Resources" |
+          . build-scripts/xcode/build_phases/localization.sh
+          inputFiles:
+          - $(SRCROOT)/common/strings/default_common_strings_ru.json
+
+        - name: API Generator
+          script: . build-scripts/xcode/build_phases/api_generator.sh 1.4.0-alpha3 Resources/Generated
+
+        - name: License List
+          script: readonly PODS_ROOT="${SRCROOT}/Pods" |
+          ${PODS_ROOT}/LicensePlist/license-plist --output-path Resources/LicenseList --prefix Licenses --suppress-opening-directory
+
+    CodeLint:
+      buildScripts:
+        - name: Check Pods Manifest.lock
+          script: ""
+          inputFiles:
+          - ${SRCROOT}/Podfile.lock
+          - ${PODS_ROOT}/Manifest.lock
+          outputFiles:
+          - $(DERIVED_FILE_DIR)/Pods-Ubrd-checkManifestLockResult.txt
+
+        - name: Swiftlint
+          script: readonly PODS_ROOT=${SRCROOT}/Pods |
+          readonly SCRIPT_DIR=${SRCROOT}/build-scripts/xcode/build_phases |
+          . ${SCRIPT_DIR}/swiftlint.sh
+          outputFileLists:
+          - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
+
+        - name: CopyPaste Detection
+          script: readonly SCRIPT_DIR=${SRCROOT}/build-scripts/xcode/build_phases |
+          . build-scripts/xcode/build_phases/copy_paste_detection.sh Localization Generated Pods
+          inputFileLists:
+          - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
+
+    UnusedDetection:
+      buildScripts:
+        - name: UnusedCode Detection
+          script: . build-scripts/xcode/build_phases/unused.sh

@@ -7,7 +7,6 @@ cd "$DIR"
 brew bundle
 
 # Устанавливаем bundler
-
 gem install bundler
 
 # Устанавливаем ruby зависимости.
@@ -16,3 +15,6 @@ bundle install
 
 # Обновляем репозиторий подов и запускаем их установку.
 bundle exec pod install --repo-update
+
+# Configure githooks folder path
+git config --local core.hooksPath .githooks
