@@ -34,6 +34,16 @@ cd $PROJECT_NAME_WITH_PREFIX
 rm -rf $PROJECT_NAME
 rm -rf $(ls)
 
+# create git if not exists
+if [ ! -d .git ]; then
+  git init
+  git remote add origin ${GIT_URL}
+  git fetch
+  git checkout -t origin/master
+else
+  echo "Git exists..."
+fi
+
 # source code project folder
 echo "Create sources folders..."
 mkdir -p $PROJECT_NAME
@@ -82,8 +92,10 @@ generate "{project_name: $PROJECT_NAME, deployment_target: $DEPLOYMENT_TARGET, p
 echo "Generate xcodeproj file..."
 xcodegen --spec project.yml
 
-# generate code lint folders
-generate "{project_name: $PROJECT_NAME" $TEMPLATES/build_phases/code_lint_folders.mustache build_phases/code_lint_folders.xcfilelist
+# conifgure build_phases folder
+cp -r $CURRENT_DIR/sources/build_phases ./build_phases
+
+generate "{project_name: $PROJECT_NAME}" $TEMPLATES/build_phases/code_lint_folders.mustache build_phases/code_lint_folders.xcfilelist
 
 # creating .gitkeep in each folder to enforce git stash this folder
 for folder in `cat $CURRENT_DIR/foldernames.txt`; do
@@ -99,8 +111,13 @@ cp $TEMPLATES/gitignore .gitignore
 cp $TEMPLATES/gitattributes .gitattributes
 
 # configure git hooks
+cp -r $CURRENT_DIR/sources/.githooks .githooks
+
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/githooks/post-merge.mustache .githooks/post-merge
 generate "{project_name: $PROJECT_NAME}" $TEMPLATES/githooks/pre-commit.mustache .githooks/pre-commit
+
+chmod +x .githooks/post-merge
+chmod +x .githooks/pre-commit
 
 git config --local core.hooksPath .githooks
 

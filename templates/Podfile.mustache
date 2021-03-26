@@ -1,5 +1,5 @@
-source 'https://github.com/CocoaPods/Specs'
-source 'https://github.com/TouchInstinct/Podspecs.git'
+source 'https://cdn.cocoapods.org/'
+source 'https://github.com/TouchInstinct/Podspecs'
 
 platform :ios, '{{deployment_target}}'
 
@@ -22,7 +22,7 @@ target '{{project_name}}' do
   pod 'Firebase/Analytics' # for Firebase/Performance
 
   # Rx
-  pod 'RxKeyboard', '0.9.0'
+  pod 'RxKeyboard', '1.0.0'
 
   # Security
   pod 'KeychainAccess'
@@ -36,8 +36,24 @@ target '{{project_name}}' do
 
    # UI
   pod 'TableKit'
-  pod 'StatefulViewController'
 
+end
+
+# fixes Xcode 12 warnings:
+# "The iOS Simulator deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 8.0, but the range of supported deployment target versions is 9.0 to 14.0.99."
+# see https://github.com/CocoaPods/CocoaPods/issues/9884
+
+min_supported_deployment_target = Version.new(9.0) # as of Xcode 12
+
+post_install do |pi|
+  pi.pods_project.targets.each do |target|
+     target.build_configurations.each do |config|
+      build_config_version = Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'])
+      max_deployment_target = [build_config_version, min_supported_deployment_target].max
+
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = max_deployment_target.to_s
+    end
+  end
 end
 
 # If you have slow HDD

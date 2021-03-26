@@ -74,46 +74,54 @@ targets:
       - path: {{project_name}}/Views
         buildPhase: sources
 
-  aggregateTargets:
-    CodeGen:
-      buildScripts:
-        - name: Localization
-          script: readonly PRODUCT_NAME="Resources" |
+aggregateTargets:
+  CodeGen:
+    buildScripts:
+      - name: Localization
+        script: |
+          readonly PRODUCT_NAME="Resources"
           . build-scripts/xcode/build_phases/localization.sh
-          inputFiles:
-          - $(SRCROOT)/common/strings/default_common_strings_ru.json
+        inputFiles:
+        - $(SRCROOT)/common/strings/default_common_strings_ru.json
 
-        - name: API Generator
-          script: . build-scripts/xcode/build_phases/api_generator.sh 1.4.0-alpha3 Resources/Generated
+      - name: API Generator
+        script: . build-scripts/xcode/build_phases/api_generator.sh 1.4.0-alpha3 {{project_name}}/Generated
 
-        - name: License List
-          script: readonly PODS_ROOT="${SRCROOT}/Pods" |
+      - name: License List
+        script: |
+          readonly PODS_ROOT="${SRCROOT}/Pods"
           ${PODS_ROOT}/LicensePlist/license-plist --output-path Resources/LicenseList --prefix Licenses --suppress-opening-directory
 
-    CodeLint:
-      buildScripts:
-        - name: Check Pods Manifest.lock
-          script: ""
-          inputFiles:
-          - ${SRCROOT}/Podfile.lock
-          - ${PODS_ROOT}/Manifest.lock
-          outputFiles:
-          - $(DERIVED_FILE_DIR)/Pods-Ubrd-checkManifestLockResult.txt
+  CodeLint:
+    buildScripts:
+      - name: Check Pods Manifest.lock
+        script: |
+          readonly PODS_ROOT=${SRCROOT}/Pods
+          . $(SRCROOT)/build_phases/check_pods_manifest.sh
+        inputFiles:
+        - ${SRCROOT}/Podfile.lock
+        - ${PODS_ROOT}/Manifest.lock
+        outputFiles:
+        - $(DERIVED_FILE_DIR)/Pods-Ubrd-checkManifestLockResult.txt
 
-        - name: Swiftlint
-          script: readonly PODS_ROOT=${SRCROOT}/Pods |
-          readonly SCRIPT_DIR=${SRCROOT}/build-scripts/xcode/build_phases |
+      - name: Swiftlint
+        script: |
+          readonly PODS_ROOT=${SRCROOT}/Pods
+          readonly SCRIPT_DIR=${SRCROOT}/build-scripts/xcode/build_phases
           . ${SCRIPT_DIR}/swiftlint.sh
-          outputFileLists:
-          - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
+        inputFileLists:
+        - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
+        basedOnDependencyAnalysis: false
 
-        - name: CopyPaste Detection
-          script: readonly SCRIPT_DIR=${SRCROOT}/build-scripts/xcode/build_phases |
+      - name: CopyPaste Detection
+        script: |
+          readonly SCRIPT_DIR=${SRCROOT}/build-scripts/xcode/build_phases
           . build-scripts/xcode/build_phases/copy_paste_detection.sh Localization Generated Pods
-          inputFileLists:
-          - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
+        inputFileLists:
+        - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
+        basedOnDependencyAnalysis: false
 
-    UnusedDetection:
-      buildScripts:
-        - name: UnusedCode Detection
-          script: . build-scripts/xcode/build_phases/unused.sh
+  UnusedDetection:
+    buildScripts:
+      - name: UnusedCode Detection
+        script: . build-scripts/xcode/build_phases/unused.sh
