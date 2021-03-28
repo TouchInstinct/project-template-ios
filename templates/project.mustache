@@ -116,3 +116,19 @@ aggregateTargets:
     buildScripts:
       - name: UnusedCode Detection
         script: . build-scripts/xcode/build_phases/unused.sh
+
+schemes:
+  CodeGen:
+    build:
+      targets:
+        CodeGen: [run, archive]
+
+  CodeLint:
+    build:
+      targets:
+        CodeLint: [analyze]
+
+  UnusedDetection:
+    build:
+      targets:
+        UnusedDetection: [analyze]
