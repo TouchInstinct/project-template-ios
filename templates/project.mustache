@@ -1,4 +1,5 @@
 name: {{project_name}}
+
 options:
   createIntermediateGroups: true
   xcodeVersion: 11.0
@@ -6,10 +7,12 @@ options:
   indentWidth: 4
   deploymentTarget:
     iOS: "{{deployment_target}}"
+
 configs:
   AppStore: release
   Release: release
   Debug: debug
+
 targets:
   {{project_name}}:
     settings:
@@ -29,16 +32,7 @@ targets:
           GOOGLE_SERVICE_INFO_PLIST_PATH: $(SRCROOT)/$(TARGET_NAME)/Resources/AppStore-GoogleService-Info.plist
     type: application
     platform: iOS
-    prebuildScripts:
-      - script: ". build-scripts/xcode/build_phases/localization.sh"
-        name: Localization
-      - script: ". build-scripts/xcode/build_phases/api_generator.sh 1.4.0-beta4"
-        name: API Generator
     postbuildScripts:
-      - script: ". build-scripts/xcode/build_phases/swiftlint.sh"
-        name: Swiftlint
-      - script: ". build-scripts/xcode/build_phases/copy_paste_detection.sh"
-        name: CopyPaste Detection
       - script: "\"${PODS_ROOT}/FirebaseCrashlytics/run\" --google-service-plist ${GOOGLE_SERVICE_INFO_PLIST_PATH}"
         name: Firebase
         runOnlyWhenInstalling: true
@@ -70,3 +64,71 @@ targets:
         buildPhase: sources
       - path: {{project_name}}/Views
         buildPhase: sources
+
+aggregateTargets:
+  CodeGen:
+    buildScripts:
+      - name: Localization
+        script: |
+          readonly PRODUCT_NAME={{project_name}}
+          . build-scripts/xcode/build_phases/localization.sh
+        inputFiles:
+        - $(SRCROOT)/common/strings/default_common_strings_ru.json
+
+      - name: API Generator
+        script: . build-scripts/xcode/build_phases/api_generator.sh 1.4.0-alpha3 {{project_name}}/Generated
+
+      - name: License List
+        script: |
+          readonly PODS_ROOT="${SRCROOT}/Pods"
+          ${PODS_ROOT}/LicensePlist/license-plist --output-path Resources/LicenseList --prefix Licenses --suppress-opening-directory
+
+  CodeLint:
+    buildScripts:
+      - name: Check Pods Manifest.lock
+        script: |
+          readonly PODS_ROOT="${SRCROOT}/Pods"
+          . ${SRCROOT}/build_phases/check_pods_manifest.sh
+        inputFiles:
+        - ${SRCROOT}/Podfile.lock
+        - ${PODS_ROOT}/Manifest.lock
+        outputFiles:
+        - $(DERIVED_FILE_DIR)/Pods-Ubrd-checkManifestLockResult.txt
+
+      - name: Swiftlint
+        script: |
+          readonly PODS_ROOT="${SRCROOT}/Pods"
+          readonly SCRIPT_DIR="${SRCROOT}/build-scripts/xcode/build_phases"
+          . ${SCRIPT_DIR}/swiftlint.sh
+        inputFileLists:
+        - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
+        basedOnDependencyAnalysis: false
+
+      - name: CopyPaste Detection
+        script: |
+          readonly SCRIPT_DIR="${SRCROOT}/build-scripts/xcode/build_phases"
+          . build-scripts/xcode/build_phases/copy_paste_detection.sh Localization Generated Pods
+        inputFileLists:
+        - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
+        basedOnDependencyAnalysis: false
+
+  UnusedDetection:
+    buildScripts:
+      - name: UnusedCode Detection
+        script: . build-scripts/xcode/build_phases/unused.sh
+
+schemes:
+  CodeGen:
+    build:
+      targets:
+        CodeGen: [run, archive]
+
+  CodeLint:
+    build:
+      targets:
+        CodeLint: [analyze]
+
+  UnusedDetection:
+    build:
+      targets:
+        UnusedDetection: [analyze]

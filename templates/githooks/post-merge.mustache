@@ -1,0 +1,3 @@
+echo "Running post-merge hook"
+
+sh .githooks/scripts/CodeGen.sh './{{project_name}}.xcodeproj'
