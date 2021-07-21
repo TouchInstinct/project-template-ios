@@ -2,7 +2,7 @@ name: {{project_name}}
 
 options:
   createIntermediateGroups: true
-  xcodeVersion: 11.0
+  xcodeVersion: 12.2
   usesTabs: false
   indentWidth: 4
   deploymentTarget:
@@ -13,8 +13,32 @@ configs:
   Release: release
   Debug: debug
 
+packages:
+  TICoordinatorKit:
+    url: https://github.com/TouchInstinct/TICoordinatorKit
+    version: 1.1.6
+  LeadKit:
+    url: https://github.com/TouchInstinct/LeadKit
+    version: 1.4.0
+  SnapKit:
+    url: https://github.com/SnapKit/SnapKit
+    version: 5.0.1
+
 targets:
   {{project_name}}:
+    dependencies:
+      - package: LeadKit
+        product: TISwiftUtils
+      - package: LeadKit
+        product: TIFoundationUtils
+      - package: LeadKit
+        product: TIKeychainUtils
+      - package: LeadKit
+        product: TIUIKitCore
+      - package: LeadKit
+        product: TIUIElements
+      - package: LeadKit
+        product: TITableKitUtils
     settings:
       base:
         SWIFT_VERSION: 5.0
@@ -32,10 +56,6 @@ targets:
           GOOGLE_SERVICE_INFO_PLIST_PATH: $(SRCROOT)/$(TARGET_NAME)/Resources/AppStore-GoogleService-Info.plist
     type: application
     platform: iOS
-    postbuildScripts:
-      - script: "\"${PODS_ROOT}/FirebaseCrashlytics/run\" --google-service-plist ${GOOGLE_SERVICE_INFO_PLIST_PATH}"
-        name: Firebase
-        runOnlyWhenInstalling: true
     sources:
       - path: {{project_name}}
         excludes:
@@ -50,7 +70,7 @@ targets:
         buildPhase: sources
       - path: {{project_name}}/Extensions
         buildPhase: sources
-      - path: {{project_name}}/Generated
+      - path: Generated
         buildPhase: sources
       - path: {{project_name}}/Networking
         buildPhase: sources
@@ -70,13 +90,13 @@ aggregateTargets:
     buildScripts:
       - name: Localization
         script: |
-          readonly PRODUCT_NAME={{project_name}}
+          readonly PRODUCT_NAME="{{project_name}}"
           . build-scripts/xcode/build_phases/localization.sh
         inputFiles:
         - $(SRCROOT)/common/strings/default_common_strings_ru.json
 
       - name: API Generator
-        script: . build-scripts/xcode/build_phases/api_generator.sh 1.4.0-alpha3 {{project_name}}/Generated
+        script: #. build-scripts/xcode/build_phases/api_generator.sh 1.4.0-alpha3 {{project_name}}/Generated
 
       - name: License List
         script: |
@@ -90,10 +110,10 @@ aggregateTargets:
           readonly PODS_ROOT="${SRCROOT}/Pods"
           . ${SRCROOT}/build_phases/check_pods_manifest.sh
         inputFiles:
-        - ${SRCROOT}/Podfile.lock
-        - ${PODS_ROOT}/Manifest.lock
+          - ${SRCROOT}/Podfile.lock
+          - ${PODS_ROOT}/Manifest.lock
         outputFiles:
-        - $(DERIVED_FILE_DIR)/Pods-Ubrd-checkManifestLockResult.txt
+          - $(DERIVED_FILE_DIR)/Pods-Ubrd-checkManifestLockResult.txt
 
       - name: Swiftlint
         script: |
@@ -101,16 +121,14 @@ aggregateTargets:
           readonly SCRIPT_DIR="${SRCROOT}/build-scripts/xcode/build_phases"
           . ${SCRIPT_DIR}/swiftlint.sh
         inputFileLists:
-        - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
-        basedOnDependencyAnalysis: false
+          - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
 
       - name: CopyPaste Detection
         script: |
           readonly SCRIPT_DIR="${SRCROOT}/build-scripts/xcode/build_phases"
           . build-scripts/xcode/build_phases/copy_paste_detection.sh Localization Generated Pods
         inputFileLists:
-        - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
-        basedOnDependencyAnalysis: false
+          - $(SRCROOT)/build_phases/code_lint_folders.xcfilelist
 
   UnusedDetection:
     buildScripts:
@@ -118,6 +136,11 @@ aggregateTargets:
         script: . build-scripts/xcode/build_phases/unused.sh
 
 schemes:
+  {{project_name}}:
+    build:
+      targets:
+        {{project_name}}: all
+
   CodeGen:
     build:
       targets:

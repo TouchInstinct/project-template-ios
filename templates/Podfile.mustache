@@ -1,5 +1,5 @@
 source 'https://cdn.cocoapods.org/'
-source 'git@github.com:TouchInstinct/Podspecs'
+source 'https://github.com/TouchInstinct/Podspecs.git'
 
 platform :ios, '{{deployment_target}}'
 
@@ -21,21 +21,8 @@ target '{{project_name}}' do
   pod 'Firebase/Performance'
   pod 'Firebase/Analytics' # for Firebase/Performance
 
-  # Rx
-  pod 'RxKeyboard', '1.0.0'
-
-  # Security
-  pod 'KeychainAccess'
-
   # Utils
-  pod 'LeadKit'
   pod 'DeviceKit'
-
-  # Layout
-  pod 'SnapKit'
-
-   # UI
-  pod 'TableKit'
 
 end
 
