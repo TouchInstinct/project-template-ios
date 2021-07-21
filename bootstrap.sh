@@ -8,7 +8,7 @@ function generate {
   RESULT_PATH=$3
 
   echo $PARAMS > data.yml
-  mustache data.yml $TEMPLATE_PATH > $RESULT_PATH
+  bundle exec mustache data.yml $TEMPLATE_PATH > $RESULT_PATH
   rm data.yml
 }
 
@@ -17,7 +17,7 @@ readonly PROJECTS_PATH=$1
 readonly PROJECT_NAME=$2
 readonly PROJECT_NAME_WITH_PREFIX=$2-ios
 readonly COMMON_REPO_NAME=${3:-$2-common}
-readonly DEPLOYMENT_TARGET="12.0"
+readonly DEPLOYMENT_TARGET="13.0"
 readonly CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 readonly TEMPLATES=$CURRENT_DIR/templates
 readonly MATCH_PASSWORD=`pwgen 8 1`
@@ -60,7 +60,6 @@ done
 
 # install required gems & brews
 cp $CURRENT_DIR/sources/Gemfile Gemfile
-cp $CURRENT_DIR/sources/Gemfile.lock Gemfile.lock
 cp $CURRENT_DIR/sources/Brewfile Brewfile
 
 gem install bundler
@@ -138,7 +137,7 @@ generate "{project_name: $PROJECT_NAME}" $TEMPLATES/README.mustache README.md
 git submodule add git@github.com:TouchInstinct/$COMMON_REPO_NAME.git common
 git submodule add git@github.com:TouchInstinct/BuildScripts.git build-scripts
 
-git submodule update --init
+git submodule update --init --recursive --remote
 
 # final clean up
 rm project.yml
@@ -146,12 +145,6 @@ rm project.yml
 # install additional brews
 cp $CURRENT_DIR/additional/Brewfile Brewfile
 brew bundle
-
-#copy package for firebase
-cp $CURRENT_DIR/sources/package.json package.json
-
-#yarn
-yarn install
 
 # copy setup, install and update commands
 cp $CURRENT_DIR/sources/setup.command setup.command

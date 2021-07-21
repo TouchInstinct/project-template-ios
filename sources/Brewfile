@@ -1,3 +1,4 @@
-tap "yonaskolb/XcodeGen", "https://github.com/yonaskolb/XcodeGen.git"
-
-brew "XcodeGen"
+brew "imagemagick"
+brew "pmd"
+brew "xcodegen"
+brew "gettext"

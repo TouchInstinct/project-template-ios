@@ -2,7 +2,7 @@ Analytics
 Cells
 Controllers
 Extensions
-Generated
+../Generated
 Networking
 Protocols
 Resources/Localization
